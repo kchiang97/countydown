@@ -13,7 +13,6 @@
   --fur:#f6de5a; --fur-dark:#e6cf44; --choco:#6a4a2c; --cream:#fff9e6;
   --pink:#ff9cc6; --pink-dark:#ff7fb4; --sky:#a7e2ff; --sky-dark:#6cc7f0;
   --shadow:#2b1a11; --text:#432b1b;
-
   --pupSize:48px; --pupOpacity:0.55;
   --rainbowSize:18px; --rainbowOpacity:0.28;
 }
@@ -60,7 +59,7 @@ h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--choco)}
 .num{font-size:clamp(24px,8.5vw,44px); line-height:1; color:var(--choco)}
 .label{margin-top:6px; color:var(--sky); font-size:clamp(9px,2.8vw,10px)}
 
-/* Controls */
+/* Controls (two rows) */
 .controls{display:grid; gap:10px; width:min(640px,92vw)}
 .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
 input,button{
@@ -102,7 +101,7 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
   .num{ font-size:clamp(28px,11.5vw,44px) }
   .label{ font-size:10px }
 
-  /* controls match grid columns */
+  /* controls match grid columns exactly */
   .controls{ gap:10px; }
   .controls .row:first-child{
     display:grid; grid-template-columns:1fr 1fr; gap:10px;
