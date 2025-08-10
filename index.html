@@ -6,15 +6,13 @@
 <title>Countydown</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
 
 <style>
 :root{
   --bg:#000016; --maze:#0a1a4f; --grid:#0b0f2a; --text:#e6f3ff; --muted:#7aa0ff;
   --accent:#ffeb00; --accent-2:#00e5ff; --tile:#111b4a;
-  --pupSize:48px;         /* tile size */
-  --pupOpacity:0.35;      /* wallpaper opacity (0=hidden, 1=solid) */
+  --pupSize:48px; --pupOpacity:0.45;
 }
 *{box-sizing:border-box} html,body{height:100%}
 body{
@@ -24,13 +22,11 @@ body{
     linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
     var(--bg);
   color:var(--text);
-  font-family:"Press Start 2P",system-ui,monospace;
+  font-family:"Press Start 2P",monospace;
   display:grid; place-items:center; padding:16px;
   image-rendering: pixelated;
 }
 .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
-
-/* Bezel with embedded Pompompurin wallpaper */
 .bezel{
   position:relative; width:100%; min-height:68vh; border-radius:8px;
   background:linear-gradient(180deg,#0d1f66,#08133a);
@@ -41,103 +37,15 @@ body{
   content:""; position:absolute; inset:0; opacity:var(--pupOpacity);
   image-rendering: pixelated;
   background-repeat:repeat; background-size:var(--pupSize) var(--pupSize);
-  /* Embedded pixel Pompompurin sprite (SVG, drawn as tiny squares) */
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'>\
-  <rect width='100%' height='100%' fill='none'/>\
-  <!-- golden body (#f6de5a) -->\
-  <g fill='%23f6de5a'>\
-    <rect x='5' y='8' width='1' height='1'/>\
-    <rect x='6' y='8' width='1' height='1'/>\
-    <rect x='7' y='8' width='1' height='1'/>\
-    <rect x='4' y='9' width='1' height='1'/>\
-    <rect x='5' y='9' width='1' height='1'/>\
-    <rect x='6' y='9' width='1' height='1'/>\
-    <rect x='7' y='9' width='1' height='1'/>\
-    <rect x='8' y='9' width='1' height='1'/>\
-    <rect x='3' y='10' width='1' height='1'/>\
-    <rect x='4' y='10' width='1' height='1'/>\
-    <rect x='5' y='10' width='1' height='1'/>\
-    <rect x='6' y='10' width='1' height='1'/>\
-    <rect x='7' y='10' width='1' height='1'/>\
-    <rect x='8' y='10' width='1' height='1'/>\
-    <rect x='9' y='10' width='1' height='1'/>\
-    <rect x='3' y='11' width='1' height='1'/>\
-    <rect x='4' y='11' width='1' height='1'/>\
-    <rect x='5' y='11' width='1' height='1'/>\
-    <rect x='6' y='11' width='1' height='1'/>\
-    <rect x='7' y='11' width='1' height='1'/>\
-    <rect x='8' y='11' width='1' height='1'/>\
-    <rect x='9' y='11' width='1' height='1'/>\
-    <rect x='2' y='12' width='1' height='1'/>\
-    <rect x='3' y='12' width='1' height='1'/>\
-    <rect x='4' y='12' width='1' height='1'/>\
-    <rect x='5' y='12' width='1' height='1'/>\
-    <rect x='6' y='12' width='1' height='1'/>\
-    <rect x='7' y='12' width='1' height='1'/>\
-    <rect x='8' y='12' width='1' height='1'/>\
-    <rect x='9' y='12' width='1' height='1'/>\
-    <rect x='10' y='12' width='1' height='1'/>\
-    <rect x='2' y='13' width='1' height='1'/>\
-    <rect x='3' y='13' width='1' height='1'/>\
-    <rect x='4' y='13' width='1' height='1'/>\
-    <rect x='5' y='13' width='1' height='1'/>\
-    <rect x='6' y='13' width='1' height='1'/>\
-    <rect x='7' y='13' width='1' height='1'/>\
-    <rect x='8' y='13' width='1' height='1'/>\
-    <rect x='9' y='13' width='1' height='1'/>\
-    <rect x='3' y='14' width='1' height='1'/>\
-    <rect x='4' y='14' width='1' height='1'/>\
-    <rect x='5' y='14' width='1' height='1'/>\
-    <rect x='6' y='14' width='1' height='1'/>\
-    <rect x='7' y='14' width='1' height='1'/>\
-    <rect x='8' y='14' width='1' height='1'/>\
-  </g>\
-  <!-- brown details (beret/ears/eyes) #6a4a2c -->\
-  <g fill='%236a4a2c'>\
-    <!-- beret top -->\
-    <rect x='5' y='7' width='1' height='1'/>\
-    <rect x='6' y='7' width='1' height='1'/>\
-    <rect x='7' y='7' width='1' height='1'/>\
-    <!-- beret sides -->\
-    <rect x='4' y='8' width='1' height='1'/>\
-    <rect x='8' y='8' width='1' height='1'/>\
-    <!-- ears -->\
-    <rect x='2' y='9' width='1' height='1'/>\
-    <rect x='1' y='9' width='1' height='1'/>\
-    <rect x='10' y='9' width='1' height='1'/>\
-    <rect x='11' y='9' width='1' height='1'/>\
-    <!-- eyes -->\
-    <rect x='5' y='11' width='1' height='1'/>\
-    <rect x='8' y='11' width='1' height='1'/>\
-    <!-- nose -->\
-    <rect x='6' y='12' width='1' height='1'/>\
-  </g>\
-  <!-- belly highlight #ffcc66 -->\
-  <g fill='%23ffcc66'>\
-    <rect x='5' y='13' width='1' height='1'/>\
-    <rect x='6' y='13' width='1' height='1'/>\
-    <rect x='7' y='13' width='1' height='1'/>\
-  </g>\
-</svg>");
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'><rect width='24' height='24' fill='none'/><g fill='%23f6de5a'><rect x='5' y='8' width='1' height='1'/><rect x='6' y='8' width='1' height='1'/><rect x='7' y='8' width='1' height='1'/><rect x='4' y='9' width='1' height='1'/><rect x='5' y='9' width='1' height='1'/><rect x='6' y='9' width='1' height='1'/><rect x='7' y='9' width='1' height='1'/><rect x='8' y='9' width='1' height='1'/><rect x='3' y='10' width='1' height='1'/><rect x='4' y='10' width='1' height='1'/><rect x='5' y='10' width='1' height='1'/><rect x='6' y='10' width='1' height='1'/><rect x='7' y='10' width='1' height='1'/><rect x='8' y='10' width='1' height='1'/><rect x='9' y='10' width='1' height='1'/><rect x='3' y='11' width='1' height='1'/><rect x='4' y='11' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='6' y='11' width='1' height='1'/><rect x='7' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='9' y='11' width='1' height='1'/><rect x='2' y='12' width='1' height='1'/><rect x='3' y='12' width='1' height='1'/><rect x='4' y='12' width='1' height='1'/><rect x='5' y='12' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/><rect x='7' y='12' width='1' height='1'/><rect x='8' y='12' width='1' height='1'/><rect x='9' y='12' width='1' height='1'/><rect x='10' y='12' width='1' height='1'/><rect x='2' y='13' width='1' height='1'/><rect x='3' y='13' width='1' height='1'/><rect x='4' y='13' width='1' height='1'/><rect x='5' y='13' width='1' height='1'/><rect x='6' y='13' width='1' height='1'/><rect x='7' y='13' width='1' height='1'/><rect x='8' y='13' width='1' height='1'/><rect x='9' y='13' width='1' height='1'/><rect x='3' y='14' width='1' height='1'/><rect x='4' y='14' width='1' height='1'/><rect x='5' y='14' width='1' height='1'/><rect x='6' y='14' width='1' height='1'/><rect x='7' y='14' width='1' height='1'/><rect x='8' y='14' width='1' height='1'/></g><g fill='%236a4a2c'><rect x='5' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='7' y='7' width='1' height='1'/><rect x='4' y='8' width='1' height='1'/><rect x='8' y='8' width='1' height='1'/><rect x='2' y='9' width='1' height='1'/><rect x='1' y='9' width='1' height='1'/><rect x='10' y='9' width='1' height='1'/><rect x='11' y='9' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/></g></svg>");
 }
-.bezel::after{
-  content:""; position:absolute; inset:0;
-  background: radial-gradient(80% 80% at 50% 50%, rgba(3,12,38,.35), rgba(3,12,38,.8));
-}
-
-/* Content */
 .panel{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:14px; width:100%}
 h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--accent)}
 .subtitle{color:var(--muted); font-size:clamp(10px,3.3vw,12px)}
-
-/* Board (solid boxes) */
 .board{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:min(640px,92vw)}
 .cell{background:#0a1340; border:4px solid var(--maze); border-radius:4px; padding:12px 8px}
 .num{font-size:clamp(22px,8.5vw,42px); color:#fff}
 .label{margin-top:6px; color:var(--accent-2); font-size:clamp(9px,2.8vw,10px)}
-
-/* Controls */
 .controls{display:grid; gap:10px; width:min(640px,92vw)}
 .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
 input,button{
@@ -148,8 +56,6 @@ input,button{
 button{cursor:pointer; background:var(--accent-2); color:#00121c; min-width:140px}
 .secondary{background:#14235e; color:#cfe4ff}
 footer{margin-top:6px; color:var(--muted); font-size:10px}
-
-/* Flatpickr theme */
 .flatpickr-calendar{
   font-family:"Press Start 2P",monospace;
   background:#0a1340; border:4px solid var(--maze); color:var(--text);
@@ -157,13 +63,11 @@ footer{margin-top:6px; color:var(--muted); font-size:10px}
 .flatpickr-months .flatpickr-month, .flatpickr-weekdays{
   background:#0d1f66; color:#e6f3ff; border-bottom:1px solid #041034;
 }
-.flatpickr-day{border-radius:2px}
 .flatpickr-day:hover{background:#14235e}
 .flatpickr-day.today{background:#14235e; border:1px solid #041034}
 .flatpickr-day.selected{background:var(--accent-2); color:#00121c}
 .flatpickr-time{border-top:1px solid #041034}
 .flatpickr-time input{color:#e6f3ff; background:#0a1340; border:none}
-
 @media (max-width:420px){
   .board{grid-template-columns:repeat(2,1fr)}
   button{min-width:44vw}
@@ -176,15 +80,13 @@ footer{margin-top:6px; color:var(--muted); font-size:10px}
     <div class="panel">
       <h1 id="title">COUNTYDOWN</h1>
       <div class="subtitle" id="subtitle">Pick a time below.</div>
-
       <section>
-        <div class="board" role="timer" aria-live="polite" aria-atomic="true">
+        <div class="board">
           <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
           <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
           <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
           <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
         </div>
-
         <div class="controls">
           <input id="when" type="text" placeholder="Select date & time" />
           <input id="label" type="text" placeholder="Event name" />
@@ -194,31 +96,33 @@ footer{margin-top:6px; color:var(--muted); font-size:10px}
           </div>
         </div>
       </section>
-
       <footer id="footer"></footer>
     </div>
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" onerror="fallbackPicker()"></script>
 <script>
+function fallbackPicker(){
+  const input = document.getElementById('when');
+  input.type = 'datetime-local';
+}
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(2,'0');
 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time';
-
-let target = new Date();
-let tickId = null;
-
+let target = new Date(), tickId;
 $('footer').textContent = `Now: ${new Date().toLocaleString()} — ${tz}`;
-
-flatpickr("#when", {
-  enableTime:true,
-  time_24hr:true,
-  dateFormat:"Y-m-d H:i",
-  defaultDate: target,
-  minuteIncrement: 1,
-  onChange: dates => { if(dates[0]) target = dates[0]; }
-});
-
+function initPicker(){
+  if(window.flatpickr){
+    flatpickr("#when", {
+      enableTime:true, time_24hr:true,
+      dateFormat:"Y-m-d H:i",
+      defaultDate: target,
+      minuteIncrement: 1,
+      onChange: d => { if(d[0]) target = d[0]; }
+    });
+  } else fallbackPicker();
+}
 function diffParts(ms){
   if(ms<0) ms=0;
   const s=Math.floor(ms/1000);
@@ -247,13 +151,16 @@ $('start').addEventListener('click', ()=>{
 });
 $('reset').addEventListener('click', ()=>{
   target = new Date();
-  document.querySelector('#when')._flatpickr.setDate(target, true);
+  const w = document.querySelector('#when');
+  if(w._flatpickr) w._flatpickr.setDate(target,true);
+  else w.value = '';
   $('label').value = '';
   $('title').textContent = 'COUNTYDOWN';
   $('subtitle').textContent = 'Pick a time below.';
   startTimer();
 });
 update();
+document.addEventListener('DOMContentLoaded', initPicker);
 </script>
 </body>
 </html>
