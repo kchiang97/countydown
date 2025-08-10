@@ -3,84 +3,231 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Countdown</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏳</text></svg>">
+<title>Pixel Countdown</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟡</text></svg>">
+
 <style>
-  :root{--fg:#0b1220;--muted:#5b677a;--card:#fff;--bg:radial-gradient(1200px 800px at 20% 10%,#eef2ff 0%,#f7f7fb 35%,#fff 70%);--accent:#4f46e5;--accent-2:#22c55e;--shadow:0 10px 30px rgba(0,0,0,.10),0 2px 10px rgba(0,0,0,.05);--border:rgba(0,0,0,.08)}
-  @media (prefers-color-scheme:dark){:root{--fg:#e6e9ef;--muted:#9aa4b2;--card:#111827;--bg:radial-gradient(1200px 800px at 20% 10%,#0b1220 0%,#0d1326 40%,#0b1120 80%);--accent:#8b93ff;--accent-2:#4ade80;--shadow:0 10px 30px rgba(0,0,0,.35),0 2px 10px rgba(0,0,0,.25);--border:rgba(255,255,255,.12)}}
-  *{box-sizing:border-box}html,body{height:100%}
-  body{margin:0;font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Arial;color:var(--fg);background:var(--bg);display:grid;place-items:center;padding:24px}
-  .wrap{width:min(900px,92vw);display:flex;flex-direction:column;gap:20px;align-items:center;text-align:center}
-  h1{margin:0;font-size:clamp(28px,4vw,48px)}.subtitle{color:var(--muted);font-size:clamp(12px,2vw,14px)}
-  .card{width:100%;background:rgba(255,255,255,.6);backdrop-filter:saturate(140%) blur(6px);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:20px}
-  @media (prefers-color-scheme:dark){.card{background:rgba(17,24,39,.6)}}
-  .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-  .unit{padding:18px 12px;border-radius:16px;background:rgba(255,255,255,.5);border:1px solid var(--border)}
-  @media (prefers-color-scheme:dark){.unit{background:rgba(17,24,39,.5)}}
-  .num{font-variant-numeric:tabular-nums;font-size:clamp(28px,6vw,56px);line-height:1;font-weight:700}
-  .label{margin-top:6px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:12px}
-  .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin-top:10px}
-  input,button,select{font:inherit;color:inherit;background:rgba(255,255,255,.6);border:1px solid var(--border);padding:10px 12px;border-radius:12px;outline:none}
-  @media (prefers-color-scheme:dark){input,button,select{background:rgba(17,24,39,.6)}}
+  :root{
+    --bg:#000016;          /* deep arcade navy */
+    --maze:#0a1a4f;        /* maze walls */
+    --grid:#0b0f2a;        /* faint grid lines */
+    --text:#e6f3ff;        /* UI text */
+    --muted:#7aa0ff;       /* subtle hints */
+    --accent:#ffeb00;      /* “chomper” yellow */
+    --accent-2:#00e5ff;    /* neon cyan */
+    --danger:#ff3b7f;      /* neon magenta (ghosty) */
+    --ok:#56ff7a;          /* neon green */
+    --tile:#111b4a;        /* tile bg for controls */
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      /* faint grid */
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0/24px 24px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
+      var(--bg);
+    color:var(--text);
+    font-family:"Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Arial, monospace;
+    display:grid; place-items:center; padding:18px;
+    image-rendering: pixelated;
+  }
+
+  .wrap{width:min(980px,94vw); display:flex; flex-direction:column; gap:18px; align-items:center; text-align:center}
+
+  /* Pixel frame (like an arcade bezel) */
+  .bezel{
+    width:100%;
+    padding:18px;
+    background:linear-gradient(180deg,#0d1f66,#08133a);
+    border:8px solid var(--maze);
+    outline:4px solid #041034;
+    box-shadow:
+      0 0 0 6px #000,
+      0 12px 0 0 #0006,
+      0 20px 40px rgba(0,0,0,.7);
+    border-radius:4px;
+  }
+
+  h1{
+    margin:0 0 8px 0;
+    font-size: clamp(18px, 3.6vw, 28px);
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-shadow: 0 0 8px rgba(255,235,0,.35), 0 0 2px #000;
+  }
+  .subtitle{
+    color:var(--muted);
+    font-size: clamp(10px, 2.2vw, 12px);
+    line-height:1.6;
+  }
+
+  /* Timer board */
+  .board{
+    margin-top:14px;
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap:12px;
+  }
+  .cell{
+    background: #0a1340;
+    border:4px solid var(--maze);
+    outline:2px solid #020824;
+    border-radius:2px;
+    padding:14px 8px;
+    box-shadow: inset 0 0 0 4px #020b2c;
+  }
+  .num{
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(22px, 6.2vw, 42px);
+    line-height:1;
+    color:#fff;
+    text-shadow: 0 0 6px rgba(122,160,255,.45);
+  }
+  .label{
+    margin-top:8px;
+    color: var(--accent-2);
+    font-size: 10px;
+    letter-spacing: .08em;
+  }
+
+  /* Pellet progress bar (fills from left to right) */
+  .progress{
+    margin:16px 0 6px;
+    display:grid;
+    grid-template-columns: repeat(30, 1fr);
+    gap:6px;
+  }
+  .pellet{
+    width:100%; aspect-ratio:1;
+    background: #09123b;
+    border:3px solid var(--maze);
+    outline:2px solid #020824;
+    border-radius:2px;
+    position:relative;
+    box-shadow: inset 0 0 0 3px #020b2c;
+  }
+  .pellet.filled{
+    background: var(--accent);
+    border-color:#cdbd00;
+    box-shadow: 0 0 8px rgba(255,235,0,.55), inset 0 0 0 3px #473f00;
+  }
+
+  /* Legend + tiny pixel characters */
+  .legend{
+    margin-top:8px;
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+    font-size:10px; color:var(--muted);
+  }
+  .dot{display:inline-block; width:10px; height:10px; background:var(--accent); margin-right:6px; vertical-align:-1px; box-shadow:0 0 6px rgba(255,235,0,.55)}
+  .ghost{display:inline-block; width:14px; height:14px; background:var(--danger); margin-right:6px; position:relative; box-shadow:0 0 6px rgba(255,59,127,.5)}
+  .ghost::after,.ghost::before{content:""; position:absolute; bottom:-4px; width:6px; height:4px; background:var(--danger)}
+  .ghost::after{left:0}
+  .ghost::before{right:0}
+
+  /* Controls panel */
+  .controls{
+    margin-top:14px;
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  }
+  input,button,select{
+    font:inherit; color:var(--text);
+    background: var(--tile);
+    border:4px solid var(--maze);
+    outline:2px solid #020824;
+    padding:10px 12px;
+    border-radius:2px;
+  }
   input[type="datetime-local"]{min-width:260px}
-  button{cursor:pointer;border:0;background:linear-gradient(180deg,var(--accent),rgba(0,0,0,.12));color:#fff;font-weight:600;box-shadow:var(--shadow)}
-  button.secondary{background:transparent;color:var(--accent);border:1px solid rgba(79,70,229,.5);box-shadow:none}
-  .share,.notice{margin-top:6px;font-size:12px;color:var(--muted)} footer{margin-top:6px;color:var(--muted);font-size:12px}
-  .ring{width:min(160px,30vw);height:min(160px,30vw);aspect-ratio:1;position:relative;margin:6px auto 0}
-  .ring svg{position:absolute;inset:0}
-  .ring .center{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(12px,2.2vw,15px);color:var(--muted)}
-  a{color:var(--accent)}
+  button{
+    cursor:pointer;
+    background: var(--accent-2);
+    color:#00121c;
+    text-shadow:none;
+  }
+  button.secondary{
+    background: #14235e; color:#cfe4ff;
+  }
+
+  .share,.notice,footer{color:var(--muted); font-size:10px; margin-top:6px}
+  a{color:#67f3ff; text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* Tiny marquee pellets on top */
+  .marquee{
+    height:10px; overflow:hidden; position:relative; margin: 4px 0 8px;
+  }
+  .marquee .row{
+    position:absolute; left:0; right:0; top:0; display:flex; gap:14px; justify-content:center;
+    animation: slide 6s linear infinite;
+  }
+  .marquee .p{width:8px; height:8px; background:var(--accent); box-shadow:0 0 6px rgba(255,235,0,.55)}
+  @keyframes slide{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 </style>
 </head>
 <body>
-<main class="wrap">
-  <header>
-    <h1 id="title">Countdown</h1>
-    <div class="subtitle" id="subtitle">Set a target below or share a link.</div>
-    <div class="ring" aria-hidden="true">
-      <svg viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r="52" stroke="rgba(0,0,0,.12)" stroke-width="10" fill="none"></circle>
-        <circle id="progress" cx="60" cy="60" r="52" stroke="var(--accent-2)" stroke-width="10" fill="none" stroke-linecap="round" pathLength="1" transform="rotate(-90 60 60)"></circle>
-      </svg>
-      <div class="center" id="progressText"></div>
-    </div>
-  </header>
+  <main class="wrap">
+    <div class="bezel">
+      <h1 id="title">PIXEL COUNTDOWN</h1>
+      <div class="subtitle" id="subtitle">Insert coin… or pick a time below.</div>
 
-  <section class="card">
-    <div class="grid" role="timer" aria-live="polite" aria-atomic="true">
-      <div class="unit"><div class="num" id="d">0</div><div class="label">Days</div></div>
-      <div class="unit"><div class="num" id="h">00</div><div class="label">Hours</div></div>
-      <div class="unit"><div class="num" id="m">00</div><div class="label">Minutes</div></div>
-      <div class="unit"><div class="num" id="s">00</div><div class="label">Seconds</div></div>
-    </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="row">
+          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
+          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
+          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
+          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
+        </div>
+      </div>
 
-    <div class="controls">
-      <input id="when" type="datetime-local" />
-      <input id="label" type="text" placeholder="Event name (e.g., New Year)" />
-      <select id="finishfx" aria-label="Finish effect">
-        <option value="confetti">Confetti on finish</option>
-        <option value="none">No effect</option>
-      </select>
-      <button id="start">Start</button>
-      <button id="copy" class="secondary">Copy share link</button>
-      <button id="reset" class="secondary">Reset</button>
-    </div>
-    <div class="share" id="shareNote"></div>
-    <div class="notice" id="tzNote"></div>
-  </section>
+      <section>
+        <div class="board" role="timer" aria-live="polite" aria-atomic="true">
+          <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
+          <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
+          <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
+          <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
+        </div>
 
-  <footer id="footer"></footer>
-</main>
+        <!-- pellet progress bar (30 tiles) -->
+        <div class="progress" id="progress" aria-hidden="true"></div>
+
+        <div class="legend">
+          <span><span class="dot"></span>progress</span>
+          <span><span class="ghost"></span>time ghosts (be fast!)</span>
+        </div>
+
+        <div class="controls">
+          <input id="when" type="datetime-local" />
+          <input id="label" type="text" placeholder="Event (e.g., LEVEL UP)" />
+          <select id="finishfx" aria-label="Finish effect">
+            <option value="confetti">Pixel confetti on finish</option>
+            <option value="none">No effect</option>
+          </select>
+          <button id="start">START</button>
+          <button id="copy" class="secondary">COPY LINK</button>
+          <button id="reset" class="secondary">RESET</button>
+        </div>
+        <div class="share" id="shareNote"></div>
+        <div class="notice" id="tzNote"></div>
+      </section>
+
+      <footer id="footer"></footer>
+    </div>
+  </main>
 
 <script>
+  // helpers
   const $ = (id) => document.getElementById(id);
   const pad = (n) => String(n).padStart(2,'0');
-
   const params = new URLSearchParams(location.search);
+
+  // URL params: ?until=ISO&title=PIXEL%20FEST&fx=confetti
   const initialISO = params.get('until');
-  const initialTitle = params.get('title') || 'Countdown';
+  const initialTitle = params.get('title') || 'PIXEL COUNTDOWN';
   const initialFx = params.get('fx') || 'confetti';
-  const accent = params.get('accent'); if (accent) document.documentElement.style.setProperty('--accent', accent);
 
   function defaultTarget(){
     const now = new Date();
@@ -91,18 +238,24 @@
   let startTime = new Date();
   let tickId = null;
 
+  // build 30 pellets
+  const progressBar = $('progress');
+  const PELLETS = 30;
+  for (let i=0;i<PELLETS;i++){
+    const dot = document.createElement('div');
+    dot.className = 'pellet';
+    progressBar.appendChild(dot);
+  }
+
+  // init UI
   $('title').textContent = decodeURIComponent(initialTitle);
-  $('label').value = initialTitle !== 'Countdown' ? decodeURIComponent(initialTitle) : '';
+  $('label').value = initialTitle !== 'PIXEL COUNTDOWN' ? decodeURIComponent(initialTitle) : '';
   $('finishfx').value = initialFx;
   setPickerFromDate(target);
 
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time';
-  $('tzNote').textContent = `Target time shown in your timezone: ${tz}.`;
+  $('tzNote').textContent = `Time zone: ${tz}`;
   $('footer').textContent = `Now: ${new Date().toLocaleString()} — ${tz}`;
-
-  const progressEl = $('progress');
-  const progressText = $('progressText');
-  progressEl.style.strokeDasharray = '1 1';
 
   function diffParts(ms){
     if (ms < 0) ms = 0;
@@ -113,6 +266,36 @@
       minutes: Math.floor((s % 3600) / 60),
       seconds: s % 60
     };
+  }
+
+  function setPickerFromDate(date){
+    const z = new Date(date.getTime() - date.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    $('when').value = z;
+  }
+
+  function readPicker(){
+    const v = $('when').value;
+    return v ? new Date(v) : null; // local time
+  }
+
+  function pageShareLink(){
+    const title = $('label').value?.trim() || 'PIXEL COUNTDOWN';
+    const fx = $('finishfx').value || 'confetti';
+    const iso = target.toISOString();
+    const url = new URL(location.href);
+    url.searchParams.set('until', iso);
+    url.searchParams.set('title', title);
+    url.searchParams.set('fx', fx);
+    return url.toString();
+  }
+
+  function updatePellets(fracRemaining){
+    // fill pellets from left to right based on remaining fraction (1 -> full)
+    const pellets = progressBar.children;
+    const filled = Math.round(PELLETS * fracRemaining);
+    for (let i=0;i<PELLETS;i++){
+      pellets[i].classList.toggle('filled', i < filled);
+    }
   }
 
   function update(){
@@ -127,9 +310,10 @@
 
     const span = Math.max(1, target - startTime);
     const elapsed = Math.min(Math.max(0, now - startTime), span);
-    const frac = elapsed / span;
-    progressEl.style.strokeDashoffset = 1 - frac;
-    progressText.textContent = Math.round((1 - frac) * 100) + '%';
+    const fracElapsed = elapsed / span;
+    const fracRemaining = 1 - fracElapsed;
+
+    updatePellets(fracRemaining);
 
     if (remaining <= 0){
       clearInterval(tickId); tickId = null;
@@ -142,90 +326,72 @@
     tickId = setInterval(update, 250);
     update();
     $('subtitle').textContent = `Counting down to ${target.toLocaleString()} (${tz})`;
-  }
-
-  function setPickerFromDate(date){
-    const z = new Date(date.getTime() - date.getTimezoneOffset()*60000)
-              .toISOString().slice(0,16);
-    $('when').value = z;
-  }
-
-  function readPicker(){
-    const v = $('when').value;
-    return v ? new Date(v) : null; // local time
-  }
-
-  function pageShareLink(){
-    const title = $('label').value?.trim() || 'Countdown';
-    const fx = $('finishfx').value || 'confetti';
-    const iso = target.toISOString();
-    const url = new URL(location.href);
-    url.searchParams.set('until', iso);
-    url.searchParams.set('title', title);
-    url.searchParams.set('fx', fx);
-    return url.toString();
+    document.title = ($('label').value?.trim() || 'PIXEL COUNTDOWN') + ' – running';
   }
 
   function finish(){
-    $('subtitle').textContent = `It's time! (${target.toLocaleString()})`;
-    if ($('finishfx').value === 'confetti' || params.get('fx') === 'confetti') confetti();
-    document.title = 'Time\'s up! 🎉';
-    progressEl.style.strokeDashoffset = 0;
-    progressText.textContent = '0%';
+    $('subtitle').textContent = `LEVEL COMPLETE! (${target.toLocaleString()})`;
+    document.title = 'LEVEL COMPLETE! 🎉';
+    if ($('finishfx').value === 'confetti' || params.get('fx') === 'confetti') pixelConfetti();
+    updatePellets(0);
   }
 
-  function confetti(){
-    const N = 120;
+  function pixelConfetti(){
+    const N = 150;
     for (let i=0;i<N;i++){
       const p = document.createElement('div');
-      const size = 6 + Math.random()*6;
-      Object.assign(p.style,{
-        position:'fixed', left:(Math.random()*100)+'vw', top:'-10px',
-        width:size+'px', height:size+'px',
-        background: Math.random()>.5 ? 'var(--accent)' : 'var(--accent-2)',
-        transform:`rotate(${Math.random()*360}deg)`,
-        borderRadius: Math.random()>.5 ? '2px' : '50%',
-        pointerEvents:'none', zIndex:9999
-      });
+      const size = 8 + Math.random()*8;
+      p.style.position='fixed';
+      p.style.left = (Math.random()*100)+'vw';
+      p.style.top = '-12px';
+      p.style.width = size+'px';
+      p.style.height = size+'px';
+      p.style.background = [ 'var(--accent)', 'var(--accent-2)', 'var(--danger)', 'var(--ok)' ][Math.floor(Math.random()*4)];
+      p.style.imageRendering = 'pixelated';
+      p.style.zIndex = 9999;
+      p.style.outline = '2px solid #020824';
       document.body.appendChild(p);
-      const duration = 3000 + Math.random()*2500;
+      const duration = 2500 + Math.random()*2500;
       p.animate([
-        {transform:`translateY(0) rotate(0deg)`, opacity:1},
-        {transform:`translateY(100vh) rotate(${360+Math.random()*720}deg)`, opacity:0.9}
-      ], {duration, easing:'cubic-bezier(.23,1,.32,1)'}).onfinish = ()=>p.remove();
+        { transform:'translateY(0)', opacity:1 },
+        { transform:`translateY(${100+Math.random()*30}vh)`, opacity:0.9 }
+      ], {duration, easing:'linear'}).onfinish = ()=>p.remove();
     }
   }
 
   $('start').addEventListener('click', ()=>{
     const picked = readPicker();
     if (!picked) return alert('Pick a date/time first!');
-    target = picked; startTime = new Date();
+    target = picked;
+    startTime = new Date();
     const title = $('label').value?.trim();
-    $('title').textContent = title || 'Countdown';
-    document.title = title ? `${title} – Countdown` : 'Countdown';
-    $('shareNote').innerHTML = `Shareable link created. <a href="${pageShareLink()}">Open in a new tab</a> or tap "Copy".`;
+    $('title').textContent = title || 'PIXEL COUNTDOWN';
+    $('subtitle').textContent = 'Loading…';
+    $('shareNote').innerHTML = `Share: <a href="${pageShareLink()}">${pageShareLink()}</a>`;
     startTimer();
   });
 
   $('copy').addEventListener('click', async ()=>{
     try{
       await navigator.clipboard.writeText(pageShareLink());
-      $('shareNote').textContent = 'Link copied to clipboard!';
+      $('shareNote').textContent = 'Link copied!';
     }catch{
-      $('shareNote').textContent = 'Could not copy. Use your browser’s share button.';
+      $('shareNote').textContent = 'Could not copy. Long-press the address bar.';
     }
   });
 
   $('reset').addEventListener('click', ()=>{
     target = defaultTarget(); startTime = new Date();
     setPickerFromDate(target);
-    $('label').value = ''; $('title').textContent = 'Countdown';
+    $('label').value = '';
+    $('title').textContent = 'PIXEL COUNTDOWN';
     $('finishfx').value = 'confetti';
     history.replaceState({}, '', location.pathname);
     $('shareNote').textContent = '';
     startTimer();
   });
 
+  // auto-start if URL had ?until=
   if (initialISO){ startTimer(); } else { update(); }
 </script>
 </body>
