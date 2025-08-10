@@ -4,256 +4,256 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Countydown</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟡</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <style>
-  :root{
-    --bg:#000016; --maze:#0a1a4f; --grid:#0b0f2a; --text:#e6f3ff; --muted:#7aa0ff;
-    --accent:#ffeb00; --accent-2:#00e5ff; --tile:#111b4a;
-  }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{
-    margin:0; background:
-      linear-gradient(var(--grid) 1px, transparent 1px) 0 0/24px 24px,
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
-      var(--bg);
-    color:var(--text);
-    font-family:"Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Arial, monospace;
-    display:grid; place-items:center; padding:16px; -webkit-tap-highlight-color:transparent;
-    image-rendering: pixelated; overflow-x:hidden;
-  }
+:root{
+  --bg:#000016; --maze:#0a1a4f; --grid:#0b0f2a; --text:#e6f3ff; --muted:#7aa0ff;
+  --accent:#ffeb00; --accent-2:#00e5ff; --tile:#111b4a;
+  --pupSize:48px;         /* tile size */
+  --pupOpacity:0.35;      /* wallpaper opacity (0=hidden, 1=solid) */
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{
+  margin:0;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
+    var(--bg);
+  color:var(--text);
+  font-family:"Press Start 2P",system-ui,monospace;
+  display:grid; place-items:center; padding:16px;
+  image-rendering: pixelated;
+}
+.wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
 
-  .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
+/* Bezel with embedded Pompompurin wallpaper */
+.bezel{
+  position:relative; width:100%; min-height:68vh; border-radius:8px;
+  background:linear-gradient(180deg,#0d1f66,#08133a);
+  border:8px solid var(--maze); outline:4px solid #041034; overflow:hidden;
+  display:flex; align-items:center; justify-content:center; padding:16px;
+}
+.bezel::before{
+  content:""; position:absolute; inset:0; opacity:var(--pupOpacity);
+  image-rendering: pixelated;
+  background-repeat:repeat; background-size:var(--pupSize) var(--pupSize);
+  /* Embedded pixel Pompompurin sprite (SVG, drawn as tiny squares) */
+  background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'>\
+  <rect width='100%' height='100%' fill='none'/>\
+  <!-- golden body (#f6de5a) -->\
+  <g fill='%23f6de5a'>\
+    <rect x='5' y='8' width='1' height='1'/>\
+    <rect x='6' y='8' width='1' height='1'/>\
+    <rect x='7' y='8' width='1' height='1'/>\
+    <rect x='4' y='9' width='1' height='1'/>\
+    <rect x='5' y='9' width='1' height='1'/>\
+    <rect x='6' y='9' width='1' height='1'/>\
+    <rect x='7' y='9' width='1' height='1'/>\
+    <rect x='8' y='9' width='1' height='1'/>\
+    <rect x='3' y='10' width='1' height='1'/>\
+    <rect x='4' y='10' width='1' height='1'/>\
+    <rect x='5' y='10' width='1' height='1'/>\
+    <rect x='6' y='10' width='1' height='1'/>\
+    <rect x='7' y='10' width='1' height='1'/>\
+    <rect x='8' y='10' width='1' height='1'/>\
+    <rect x='9' y='10' width='1' height='1'/>\
+    <rect x='3' y='11' width='1' height='1'/>\
+    <rect x='4' y='11' width='1' height='1'/>\
+    <rect x='5' y='11' width='1' height='1'/>\
+    <rect x='6' y='11' width='1' height='1'/>\
+    <rect x='7' y='11' width='1' height='1'/>\
+    <rect x='8' y='11' width='1' height='1'/>\
+    <rect x='9' y='11' width='1' height='1'/>\
+    <rect x='2' y='12' width='1' height='1'/>\
+    <rect x='3' y='12' width='1' height='1'/>\
+    <rect x='4' y='12' width='1' height='1'/>\
+    <rect x='5' y='12' width='1' height='1'/>\
+    <rect x='6' y='12' width='1' height='1'/>\
+    <rect x='7' y='12' width='1' height='1'/>\
+    <rect x='8' y='12' width='1' height='1'/>\
+    <rect x='9' y='12' width='1' height='1'/>\
+    <rect x='10' y='12' width='1' height='1'/>\
+    <rect x='2' y='13' width='1' height='1'/>\
+    <rect x='3' y='13' width='1' height='1'/>\
+    <rect x='4' y='13' width='1' height='1'/>\
+    <rect x='5' y='13' width='1' height='1'/>\
+    <rect x='6' y='13' width='1' height='1'/>\
+    <rect x='7' y='13' width='1' height='1'/>\
+    <rect x='8' y='13' width='1' height='1'/>\
+    <rect x='9' y='13' width='1' height='1'/>\
+    <rect x='3' y='14' width='1' height='1'/>\
+    <rect x='4' y='14' width='1' height='1'/>\
+    <rect x='5' y='14' width='1' height='1'/>\
+    <rect x='6' y='14' width='1' height='1'/>\
+    <rect x='7' y='14' width='1' height='1'/>\
+    <rect x='8' y='14' width='1' height='1'/>\
+  </g>\
+  <!-- brown details (beret/ears/eyes) #6a4a2c -->\
+  <g fill='%236a4a2c'>\
+    <!-- beret top -->\
+    <rect x='5' y='7' width='1' height='1'/>\
+    <rect x='6' y='7' width='1' height='1'/>\
+    <rect x='7' y='7' width='1' height='1'/>\
+    <!-- beret sides -->\
+    <rect x='4' y='8' width='1' height='1'/>\
+    <rect x='8' y='8' width='1' height='1'/>\
+    <!-- ears -->\
+    <rect x='2' y='9' width='1' height='1'/>\
+    <rect x='1' y='9' width='1' height='1'/>\
+    <rect x='10' y='9' width='1' height='1'/>\
+    <rect x='11' y='9' width='1' height='1'/>\
+    <!-- eyes -->\
+    <rect x='5' y='11' width='1' height='1'/>\
+    <rect x='8' y='11' width='1' height='1'/>\
+    <!-- nose -->\
+    <rect x='6' y='12' width='1' height='1'/>\
+  </g>\
+  <!-- belly highlight #ffcc66 -->\
+  <g fill='%23ffcc66'>\
+    <rect x='5' y='13' width='1' height='1'/>\
+    <rect x='6' y='13' width='1' height='1'/>\
+    <rect x='7' y='13' width='1' height='1'/>\
+  </g>\
+</svg>");
+}
+.bezel::after{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(80% 80% at 50% 50%, rgba(3,12,38,.35), rgba(3,12,38,.8));
+}
 
-  /* ---------- BEZEL WITH POMPOMPURIN WALLPAPER ---------- */
-  .bezel{
-    position:relative; z-index:1;
-    width:100%; border-radius:8px;
-    background:linear-gradient(180deg,#0d1f66,#08133a);
-    border:8px solid var(--maze); outline:4px solid #041034;
-    box-shadow:0 0 0 6px #000, 0 12px 0 0 #0006, 0 20px 40px rgba(0,0,0,.7);
-    overflow:hidden;
-    /* center content vertically */
-    display:flex; align-items:center; justify-content:center;
-    min-height:68vh;
-    padding:16px;
-  }
-  /* solid wallpaper tiles inside bezel */
-  .bezel-wall{ position:absolute; inset:0; z-index:0; pointer-events:none }
-  .bezel-wall .sprite{ position:absolute; width:14px; height:12px; transform:translate(-50%,-50%); image-rendering:pixelated }
-  .bezel-wall .pix{ width:2px; height:2px; position:relative }
-  .bezel-wall i{ display:block; position:absolute; width:2px; height:2px }
-  .y{ background:#f6de5a }  .b{ background:#6a4a2c }  .p{ background:#ffcc66 }
-  .body{ width:2px; height:2px; background:#f6de5a }
-  .body.y{ box-shadow:
-    10px 6px #f6de5a, 12px 6px #f6de5a, 14px 6px #f6de5a,
-    8px 8px #f6de5a, 10px 8px #f6de5a, 12px 8px #f6de5a, 14px 8px #f6de5a, 16px 8px #f6de5a,
-    6px 10px #f6de5a, 8px 10px #f6de5a, 10px 10px #f6de5a, 12px 10px #f6de5a, 14px 10px #f6de5a, 16px 10px #f6de5a, 18px 10px #f6de5a,
-    6px 12px #f6de5a, 8px 12px #f6de5a, 10px 12px #f6de5a, 12px 12px #f6de5a, 14px 12px #f6de5a, 16px 12px #f6de5a, 18px 12px #f6de5a,
-    6px 14px #f6de5a, 8px 14px #f6de5a, 10px 14px #f6de5a, 12px 14px #f6de5a, 14px 14px #f6de5a, 16px 14px #f6de5a, 18px 14px #f6de5a,
-    4px 16px #f6de5a, 6px 16px #f6de5a, 8px 16px #f6de5a, 10px 16px #f6de5a, 12px 16px #f6de5a, 14px 16px #f6de5a, 16px 16px #f6de5a, 18px 16px #f6de5a, 20px 16px #f6de5a,
-    4px 18px #f6de5a, 6px 18px #f6de5a, 8px 18px #f6de5a, 10px 18px #f6de5a, 12px 18px #f6de5a, 14px 18px #f6de5a, 16px 18px #f6de5a, 18px 18px #f6de5a, 20px 18px #f6de5a,
-    6px 20px #f6de5a, 8px 20px #f6de5a, 10px 20px #f6de5a, 12px 20px #f6de5a, 14px 20px #f6de5a, 16px 20px #f6de5a, 18px 20px #f6de5a,
-    8px 22px #f6de5a, 10px 22px #f6de5a, 12px 22px #f6de5a, 14px 22px #f6de5a, 16px 22px #f6de5a
-  }
-  .beret.b{ box-shadow: 10px 4px #6a4a2c, 12px 4px #6a4a2c, 14px 4px #6a4a2c, 8px 6px #6a4a2c, 16px 6px #6a4a2c }
-  .earL.b{ box-shadow: 4px 8px #6a4a2c, 6px 8px #6a4a2c }
-  .earR.b{ box-shadow: 18px 8px #6a4a2c, 20px 8px #6a4a2c }
-  .eyes.b{ box-shadow: 10px 14px #6a4a2c, 16px 14px #6a4a2c }
-  .nose.b{ box-shadow: 13px 16px #6a4a2c }
-  .belly.p{ box-shadow: 10px 20px #ffcc66, 12px 20px #ffcc66, 14px 20px #ffcc66 }
+/* Content */
+.panel{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:14px; width:100%}
+h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--accent)}
+.subtitle{color:var(--muted); font-size:clamp(10px,3.3vw,12px)}
 
-  /* center glaze = slightly transparent only under content area for readability */
-  .bezel::after{
-    content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
-    background: radial-gradient(80% 80% at 50% 50%, rgba(3,12,38,.35) 0%, rgba(3,12,38,.55) 55%, rgba(3,12,38,.8) 100%);
-  }
+/* Board (solid boxes) */
+.board{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:min(640px,92vw)}
+.cell{background:#0a1340; border:4px solid var(--maze); border-radius:4px; padding:12px 8px}
+.num{font-size:clamp(22px,8.5vw,42px); color:#fff}
+.label{margin-top:6px; color:var(--accent-2); font-size:clamp(9px,2.8vw,10px)}
 
-  /* content container */
-  .panel{
-    position:relative; z-index:1;
-    display:flex; flex-direction:column; align-items:center; gap:14px;
-    width:100%;
-  }
+/* Controls */
+.controls{display:grid; gap:10px; width:min(640px,92vw)}
+.row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+input,button{
+  font:16px/1 "Press Start 2P",monospace;
+  color:var(--text); background:var(--tile);
+  border:4px solid var(--maze); border-radius:4px; padding:12px 14px;
+}
+button{cursor:pointer; background:var(--accent-2); color:#00121c; min-width:140px}
+.secondary{background:#14235e; color:#cfe4ff}
+footer{margin-top:6px; color:var(--muted); font-size:10px}
 
-  h1{margin:0; font-size:clamp(18px,5.5vw,28px); letter-spacing:1px; color:var(--accent); text-shadow:0 0 8px rgba(255,235,0,.35),0 0 2px #000; word-break:break-word}
-  .subtitle{color:var(--muted); font-size:clamp(10px,3.3vw,12px); line-height:1.6}
+/* Flatpickr theme */
+.flatpickr-calendar{
+  font-family:"Press Start 2P",monospace;
+  background:#0a1340; border:4px solid var(--maze); color:var(--text);
+}
+.flatpickr-months .flatpickr-month, .flatpickr-weekdays{
+  background:#0d1f66; color:#e6f3ff; border-bottom:1px solid #041034;
+}
+.flatpickr-day{border-radius:2px}
+.flatpickr-day:hover{background:#14235e}
+.flatpickr-day.today{background:#14235e; border:1px solid #041034}
+.flatpickr-day.selected{background:var(--accent-2); color:#00121c}
+.flatpickr-time{border-top:1px solid #041034}
+.flatpickr-time input{color:#e6f3ff; background:#0a1340; border:none}
 
-  /* timer board */
-  .board{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; width:min(640px,92vw)}
-  .cell{background:#0a1340; border:4px solid var(--maze); outline:2px solid #020824; border-radius:4px; padding:12px 8px; box-shadow:inset 0 0 0 4px #020b2c}
-  .num{font-variant-numeric:tabular-nums; font-size:clamp(22px,8.5vw,42px); line-height:1; color:#fff; text-shadow:0 0 6px rgba(122,160,255,.45)}
-  .label{margin-top:6px; color:var(--accent-2); font-size:clamp(9px,2.8vw,10px); letter-spacing:.08em}
-
-  /* controls */
-  .controls{display:grid; grid-template-columns:1fr; gap:10px; justify-items:center; width:min(640px,92vw)}
-  .row{display:flex; gap:10px; width:100%; justify-content:center; flex-wrap:wrap}
-  input,button{
-    font:16px/1 "Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Arial, monospace;
-    color:var(--text); background:var(--tile); border:4px solid var(--maze); outline:2px solid #020824; padding:12px 14px; border-radius:4px;
-  }
-  input[type="datetime-local"]{min-width:260px; width:min(420px,90vw)}
-  input[type="text"]{width:min(420px,90vw)}
-  button{cursor:pointer; background:var(--accent-2); color:#00121c; min-width:140px}
-  .secondary{background:#14235e; color:#cfe4ff}
-  footer{margin-top:6px; color:var(--muted); font-size:10px}
-
-  /* small phones */
-  @media (max-width:420px){
-    .board{grid-template-columns:repeat(2,minmax(0,1fr))}
-    button{min-width:44vw}
-  }
+@media (max-width:420px){
+  .board{grid-template-columns:repeat(2,1fr)}
+  button{min-width:44vw}
+}
 </style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="bezel">
-      <!-- tiled pup wallpaper INSIDE the bezel -->
-      <div class="bezel-wall" id="wall"></div>
+<main class="wrap">
+  <div class="bezel">
+    <div class="panel">
+      <h1 id="title">COUNTYDOWN</h1>
+      <div class="subtitle" id="subtitle">Pick a time below.</div>
 
-      <div class="panel">
-        <h1 id="title">COUNTYDOWN</h1>
-        <div class="subtitle" id="subtitle">Pick a time below.</div>
+      <section>
+        <div class="board" role="timer" aria-live="polite" aria-atomic="true">
+          <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
+          <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
+          <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
+          <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
+        </div>
 
-        <section>
-          <div class="board" role="timer" aria-live="polite" aria-atomic="true">
-            <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
-            <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
-            <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
-            <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
+        <div class="controls">
+          <input id="when" type="text" placeholder="Select date & time" />
+          <input id="label" type="text" placeholder="Event name" />
+          <div class="row">
+            <button id="start">START</button>
+            <button id="reset" class="secondary">RESET</button>
           </div>
+        </div>
+      </section>
 
-          <div class="controls">
-            <input id="when" type="datetime-local" />
-            <input id="label" type="text" placeholder="Event (e.g., LEVEL UP)" />
-            <div class="row">
-              <button id="start">START</button>
-              <button id="reset" class="secondary">RESET</button>
-            </div>
-          </div>
-        </section>
-
-        <footer id="footer"></footer>
-      </div>
+      <footer id="footer"></footer>
     </div>
-  </main>
+  </div>
+</main>
 
 <script>
-  // helpers
-  const $ = (id) => document.getElementById(id);
-  const pad = (n) => String(n).padStart(2,'0');
-  const params = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,'0');
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time';
 
-  const initialISO = params.get('until');
-  const initialTitle = params.get('title') || 'COUNTYDOWN';
+let target = new Date();
+let tickId = null;
 
-  function defaultTarget(){ const now=new Date(); return new Date(now.getFullYear()+1,0,1,0,0,0); }
+$('footer').textContent = `Now: ${new Date().toLocaleString()} — ${tz}`;
 
-  let target = initialISO ? new Date(initialISO) : defaultTarget();
-  let startTime = new Date();
-  let tickId = null;
+flatpickr("#when", {
+  enableTime:true,
+  time_24hr:true,
+  dateFormat:"Y-m-d H:i",
+  defaultDate: target,
+  minuteIncrement: 1,
+  onChange: dates => { if(dates[0]) target = dates[0]; }
+});
 
-  // init UI
-  $('title').textContent = decodeURIComponent(initialTitle);
-  $('label').value = initialTitle !== 'COUNTYDOWN' ? decodeURIComponent(initialTitle) : '';
-  setPickerFromDate(target);
-
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time';
-  $('footer').textContent = `Now: ${new Date().toLocaleString()} — ${tz}`;
-
-  function diffParts(ms){
-    if (ms < 0) ms = 0;
-    const s = Math.floor(ms / 1000);
-    return { days:Math.floor(s/86400), hours:Math.floor((s%86400)/3600), minutes:Math.floor((s%3600)/60), seconds:s%60 };
-  }
-
-  function setPickerFromDate(date){
-    const z = new Date(date.getTime() - date.getTimezoneOffset()*60000).toISOString().slice(0,16);
-    $('when').value = z;
-  }
-  function readPicker(){ const v=$('when').value; return v ? new Date(v) : null; }
-
-  function update(){
-    const now = new Date();
-    const remaining = target - now;
-    const {days, hours, minutes, seconds} = diffParts(remaining);
-
-    $('d').textContent = days;
-    $('h').textContent = pad(hours);
-    $('m').textContent = pad(minutes);
-    $('s').textContent = pad(seconds);
-
-    if (remaining <= 0){
-      clearInterval(tickId); tickId = null;
-      finish();
-    }
-  }
-
-  function startTimer(){
-    clearInterval(tickId);
-    tickId = setInterval(update, 250);
-    update();
-    $('subtitle').textContent = `Counting down to ${target.toLocaleString()} (${tz})`;
-    document.title = ($('label').value?.trim() || 'COUNTYDOWN') + ' – running';
-  }
-
-  function finish(){
-    $('subtitle').textContent = `LEVEL COMPLETE! (${target.toLocaleString()})`;
-    document.title = 'LEVEL COMPLETE! 🎉';
-  }
-
-  $('start').addEventListener('click', ()=>{
-    const picked = readPicker();
-    if (!picked) return alert('Pick a date/time first!');
-    target = picked; startTime = new Date();
-    const title = $('label').value?.trim();
-    $('title').textContent = title || 'COUNTYDOWN';
-    startTimer();
-  });
-
-  $('reset').addEventListener('click', ()=>{
-    target = defaultTarget(); startTime = new Date();
-    setPickerFromDate(target);
-    $('label').value = '';
-    $('title').textContent = 'COUNTYDOWN';
-    $('subtitle').textContent = 'Pick a time below.';
-    startTimer();
-  });
-
-  /* --------- build Pompompurin wallpaper grid inside bezel ---------- */
-  const wall = document.getElementById('wall');
-  function makeTile(container, xPct, yPct){
-    const s = document.createElement('div'); s.className = 'sprite';
-    s.style.left = xPct + '%'; s.style.top  = yPct + '%';
-    const pix = document.createElement('div'); pix.className = 'pix';
-    const body = document.createElement('i'); body.className = 'body y';
-    const beret= document.createElement('i'); beret.className= 'beret b';
-    const earL = document.createElement('i'); earL.className = 'earL b';
-    const earR = document.createElement('i'); earR.className = 'earR b';
-    const eyes = document.createElement('i'); eyes.className = 'eyes b';
-    const nose = document.createElement('i'); nose.className = 'nose b';
-    const belly= document.createElement('i'); belly.className= 'belly p';
-    pix.append(body, beret, earL, earR, eyes, nose, belly);
-    s.appendChild(pix); container.appendChild(s);
-  }
-  function buildWallpaper(){
-    wall.innerHTML = '';
-    const small = matchMedia('(max-width: 480px)').matches;
-    const cols = small ? 8 : 14;
-    const rows = small ? 10 : 9;
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<cols;c++){
-        const x = ((c + 0.5) * (100 / cols)) + ((r % 2) ? (50 / cols) : 0);
-        const y = (r + 0.5) * (100 / rows);
-        makeTile(wall, x > 100 ? x - 100 : x, y);
-      }
-    }
-  }
-  buildWallpaper();
-  addEventListener('resize', ()=>{ clearTimeout(window._wallT); window._wallT=setTimeout(buildWallpaper,150); });
-
-  // auto-start if URL had ?until=
-  if (initialISO){ startTimer(); } else { update(); }
+function diffParts(ms){
+  if(ms<0) ms=0;
+  const s=Math.floor(ms/1000);
+  return {days:Math.floor(s/86400), hours:Math.floor((s%86400)/3600), minutes:Math.floor((s%3600)/60), seconds:s%60};
+}
+function update(){
+  const now = new Date();
+  const rem = target - now;
+  const {days,hours,minutes,seconds} = diffParts(rem);
+  $('d').textContent = days;
+  $('h').textContent = pad(hours);
+  $('m').textContent = pad(minutes);
+  $('s').textContent = pad(seconds);
+  if(rem<=0){ clearInterval(tickId); $('subtitle').textContent = `LEVEL COMPLETE!`; }
+}
+function startTimer(){
+  clearInterval(tickId);
+  tickId = setInterval(update, 250);
+  update();
+  $('subtitle').textContent = `Counting down to ${target.toLocaleString()} (${tz})`;
+}
+$('start').addEventListener('click', ()=>{
+  const title = $('label').value.trim();
+  $('title').textContent = title || 'COUNTYDOWN';
+  startTimer();
+});
+$('reset').addEventListener('click', ()=>{
+  target = new Date();
+  document.querySelector('#when')._flatpickr.setDate(target, true);
+  $('label').value = '';
+  $('title').textContent = 'COUNTYDOWN';
+  $('subtitle').textContent = 'Pick a time below.';
+  startTimer();
+});
+update();
 </script>
 </body>
 </html>
