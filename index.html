@@ -2,197 +2,218 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Countydown</title>
 
+<!-- Pixel font -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Flatpickr (pinned) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
 
 <style>
-:root {
-  --fur: #f6de5a;
-  --choco: #6a4a2c;
-  --cream: #fff9e6;
-  --pink: #ff9cc6;
-  --sky: #a7e2ff;
-  --shadow: #2b1a11;
-  --text: #432b1b;
-  --tile-size: 48px;
-  --confetti-size: 18px;
+:root{
+  /* Pompompurin pastel palette */
+  --fur:#f6de5a; --fur-dark:#e6cf44; --choco:#6a4a2c; --cream:#fff9e6;
+  --pink:#ff9cc6; --pink-dark:#ff7fb4; --sky:#a7e2ff; --sky-dark:#6cc7f0;
+  --shadow:#2b1a11; --text:#432b1b;
+
+  /* Background confetti + Purin tiles */
+  --pupSize:48px; --pupOpacity:0.55;
+  --rainbowSize:18px; --rainbowOpacity:0.28;
 }
-* { box-sizing: border-box; }
-html, body {
-  margin: 0;
-  height: 100%;
-  font-family: "Press Start 2P", monospace;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+*{box-sizing:border-box} html,body{height:100%}
+body{
+  margin:0; background:#fff; color:var(--text);
+  font-family:"Press Start 2P",system-ui,monospace;
+  display:grid; place-items:center; padding:16px;
+  image-rendering: pixelated;
 }
-.container {
-  border: 8px solid var(--choco);
-  outline: 6px solid var(--shadow);
-  padding: 16px;
-  position: relative;
-  background: white;
+.wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
+
+/* ---------- Bezel with rainbow confetti + Pompompurin wallpaper ---------- */
+.bezel{
+  position:relative; width:100%; min-height:68vh; background:#fff; overflow:hidden; padding:16px;
+  border:8px solid var(--choco); outline:6px solid var(--shadow);
+  box-shadow:0 10px 0 rgba(0,0,0,.08), 0 22px 40px rgba(0,0,0,.2);
 }
-.container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><rect width='24' height='24' fill='none'/><g fill='%23f6de5a'><rect x='5' y='8' width='1' height='1'/><rect x='6' y='8' width='1' height='1'/><rect x='7' y='8' width='1' height='1'/></g><g fill='%236a4a2c'><rect x='5' y='7' width='1' height='1'/></g></svg>");
-  background-size: var(--tile-size) var(--tile-size);
-  opacity: 0.5;
-  z-index: 0;
+.bezel::before{
+  /* Layer 1: rainbow pixel confetti */
+  content:""; position:absolute; inset:0; z-index:0; opacity:var(--rainbowOpacity);
+  image-rendering: pixelated;
+  background-repeat:repeat; background-size:var(--rainbowSize) var(--rainbowSize);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'><rect width='16' height='16' fill='white'/><rect x='1' y='1' width='2' height='2' fill='%23ff4d4d'/><rect x='5' y='2' width='2' height='2' fill='%23ffa64d'/><rect x='12' y='1' width='2' height='2' fill='%23ffeb00'/><rect x='3' y='7' width='2' height='2' fill='%235de36b'/><rect x='9' y='6' width='2' height='2' fill='%234db2ff'/><rect x='13' y='7' width='2' height='2' fill='%23b36bff'/><rect x='2' y='12' width='2' height='2' fill='%23ffeb00'/><rect x='7' y='12' width='2' height='2' fill='%23ff4d4d'/><rect x='12' y='12' width='2' height='2' fill='%234db2ff'/></svg>");
 }
-.container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><rect width='16' height='16' fill='white'/><rect x='1' y='1' width='2' height='2' fill='%23ff4d4d'/><rect x='5' y='2' width='2' height='2' fill='%23ffa64d'/><rect x='12' y='1' width='2' height='2' fill='%23ffeb00'/></svg>");
-  background-size: var(--confetti-size) var(--confetti-size);
-  opacity: 0.25;
-  z-index: 0;
+.bezel::after{
+  /* Layer 2: Pompompurin tiles */
+  content:""; position:absolute; inset:0; z-index:0; opacity:var(--pupOpacity);
+  image-rendering: pixelated; background-repeat:repeat;
+  background-size:var(--pupSize) var(--pupSize);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'><rect width='24' height='24' fill='none'/><g fill='%23f6de5a'><rect x='5' y='8' width='1' height='1'/><rect x='6' y='8' width='1' height='1'/><rect x='7' y='8' width='1' height='1'/><rect x='4' y='9' width='1' height='1'/><rect x='5' y='9' width='1' height='1'/><rect x='6' y='9' width='1' height='1'/><rect x='7' y='9' width='1' height='1'/><rect x='8' y='9' width='1' height='1'/><rect x='3' y='10' width='1' height='1'/><rect x='4' y='10' width='1' height='1'/><rect x='5' y='10' width='1' height='1'/><rect x='6' y='10' width='1' height='1'/><rect x='7' y='10' width='1' height='1'/><rect x='8' y='10' width='1' height='1'/><rect x='9' y='10' width='1' height='1'/><rect x='3' y='11' width='1' height='1'/><rect x='4' y='11' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='6' y='11' width='1' height='1'/><rect x='7' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='9' y='11' width='1' height='1'/><rect x='2' y='12' width='1' height='1'/><rect x='3' y='12' width='1' height='1'/><rect x='4' y='12' width='1' height='1'/><rect x='5' y='12' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/><rect x='7' y='12' width='1' height='1'/><rect x='8' y='12' width='1' height='1'/><rect x='9' y='12' width='1' height='1'/><rect x='10' y='12' width='1' height='1'/><rect x='2' y='13' width='1' height='1'/><rect x='3' y='13' width='1' height='1'/><rect x='4' y='13' width='1' height='1'/><rect x='5' y='13' width='1' height='1'/><rect x='6' y='13' width='1' height='1'/><rect x='7' y='13' width='1' height='1'/><rect x='8' y='13' width='1' height='1'/><rect x='9' y='13' width='1' height='1'/><rect x='3' y='14' width='1' height='1'/><rect x='4' y='14' width='1' height='1'/><rect x='5' y='14' width='1' height='1'/><rect x='6' y='14' width='1' height='1'/><rect x='7' y='14' width='1' height='1'/><rect x='8' y='14' width='1' height='1'/></g><g fill='%236a4a2c'><rect x='5' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='7' y='7' width='1' height='1'/><rect x='4' y='8' width='1' height='1'/><rect x='8' y='8' width='1' height='1'/><rect x='2' y='9' width='1' height='1'/><rect x='1' y='9' width='1' height='1'/><rect x='10' y='9' width='1' height='1'/><rect x='11' y='9' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/></g><g fill='%23ffcc66'><rect x='5' y='13' width='1' height='1'/><rect x='6' y='13' width='1' height='1'/><rect x='7' y='13' width='1' height='1'/></g></svg>");
 }
-.content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+
+/* ---------- Content ---------- */
+.panel{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:14px; width:100%}
+h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--choco)}
+.subtitle{color:#7b5a45; font-size:clamp(10px,3.3vw,12px)}
+
+/* Board (pixelated boxes) */
+.board{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; width:min(640px,92vw)}
+.cell{
+  background:var(--fur);
+  border:6px solid var(--fur-dark);
+  outline:6px solid var(--choco);
+  box-shadow:0 6px 0 rgba(0,0,0,.08);
+  padding:14px 10px; border-radius:0;
 }
-h1 {
-  margin: 0;
-  color: var(--choco);
+.num{font-size:clamp(24px,8.5vw,44px); line-height:1; color:var(--choco)}
+.label{margin-top:6px; color:var(--sky); font-size:clamp(9px,2.8vw,10px)}
+
+/* Controls (pixelated buttons/inputs) */
+.controls{display:grid; gap:10px; width:min(640px,92vw)}
+.row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+input,button{
+  font:16px/1 "Press Start 2P",monospace; color:var(--text);
+  border-radius:0; border:6px solid var(--choco); outline:6px solid var(--shadow);
+  padding:12px 14px; background:#fff;
 }
-.timer {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-  width: 100%;
+button{cursor:pointer; min-width:140px; color:var(--choco)}
+#start{ background:var(--sky) } #start:hover{ background:var(--sky-dark) }
+#reset{ background:var(--pink) } #reset:hover{ background:var(--pink-dark) }
+
+/* Flatpickr (pastel + pixel borders) */
+.flatpickr-calendar{
+  font-family:"Press Start 2P",monospace; background:#fff; color:var(--text);
+  border:6px solid var(--choco) !important; outline:6px solid var(--shadow);
+  box-shadow:0 16px 40px rgba(0,0,0,.25); border-radius:0;
 }
-.time-box {
-  background: var(--fur);
-  border: 4px solid var(--choco);
-  padding: 10px;
-  text-align: center;
+.flatpickr-months .flatpickr-month, .flatpickr-weekdays{
+  background:var(--fur); color:var(--choco); border-bottom:4px solid var(--fur-dark);
 }
-.time-box span {
-  display: block;
+.flatpickr-day{border-radius:0}
+.flatpickr-day:hover{background:#fff1f8}
+.flatpickr-day.today{background:#e9f7ff; border:1px solid var(--sky-dark)}
+.flatpickr-day.selected{background:var(--pink); color:var(--choco)}
+.flatpickr-time{border-top:4px solid var(--fur-dark)}
+
+/* === Portrait fix: compact card + slim bars === */
+@media (max-width: 480px){
+  .bezel{ min-height:100vh; padding:12px; border-width:6px; outline-width:4px; }
+
+  /* Same fixed card width for timer + controls */
+  .board, .controls{
+    width:92vw;
+    max-width:320px;   /* adjust 300–340px if desired */
+    margin:0 auto;
+  }
+
+  .board{ grid-template-columns:repeat(2, 1fr); gap:10px; }
+
+  .cell{ padding:10px 8px; border-width:4px; outline-width:4px; box-shadow:none; }
+  .num{ font-size:clamp(28px,11.5vw,44px) }
+  .label{ font-size:10px }
+
+  .row{ gap:8px; justify-content:center; }
+  input,button{ width:100%; border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px; }
+
+  /* keep long date from expanding the bar */
+  #when{ font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 }
-.time-value {
-  font-size: 20px;
-}
-.time-label {
-  font-size: 10px;
-  color: var(--sky);
-}
-.controls {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  width: 100%;
-}
-input[type="text"] {
-  grid-column: span 2;
-  text-align: center;
-  padding: 8px;
-  border: 4px solid var(--choco);
-  font-family: inherit;
-  font-size: 10px;
-}
-button {
-  padding: 8px;
-  border: 4px solid var(--choco);
-  font-family: inherit;
-  font-size: 10px;
-  cursor: pointer;
-}
-.start-btn {
-  background: var(--sky);
-}
-.reset-btn {
-  background: var(--pink);
-}
+/* ultra narrow phones: stack timer 1×4 */
+@media (max-width: 340px){ .board{ grid-template-columns:1fr } }
 </style>
 </head>
 <body>
+<main class="wrap">
+  <div class="bezel">
+    <div class="panel">
+      <h1 id="title">COUNTYDOWN</h1>
+      <div class="subtitle" id="subtitle">Pick a time below.</div>
 
-<div class="container">
-  <div class="content">
-    <h1>COUNTYDOWN</h1>
-    <p style="font-size:10px;">Pick a time below.</p>
-    <div class="timer">
-      <div class="time-box">
-        <span class="time-value" id="days">0</span>
-        <span class="time-label">DAYS</span>
-      </div>
-      <div class="time-box">
-        <span class="time-value" id="hours">0</span>
-        <span class="time-label">HOURS</span>
-      </div>
-      <div class="time-box">
-        <span class="time-value" id="minutes">0</span>
-        <span class="time-label">MIN</span>
-      </div>
-      <div class="time-box">
-        <span class="time-value" id="seconds">0</span>
-        <span class="time-label">SEC</span>
-      </div>
-    </div>
-    <div class="controls">
-      <input type="text" id="datetime-picker" placeholder="Select Date & Time">
-      <button class="start-btn" id="start">Start</button>
-      <button class="reset-btn" id="reset">Reset</button>
+      <section>
+        <div class="board" role="timer" aria-live="polite" aria-atomic="true">
+          <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
+          <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
+          <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
+          <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
+        </div>
+      </section>
+
+      <section class="controls">
+        <div class="row"><input id="when" type="text" placeholder="Select date & time" /></div>
+        <div class="row">
+          <button id="start">Start</button>
+          <button id="reset">Reset</button>
+        </div>
+      </section>
     </div>
   </div>
-</div>
+</main>
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" onerror="document.getElementById('when').type='datetime-local'"></script>
 <script>
-let countdownInterval;
-const daysEl = document.getElementById('days');
-const hoursEl = document.getElementById('hours');
-const minutesEl = document.getElementById('minutes');
-const secondsEl = document.getElementById('seconds');
-let targetDate = null;
+let target = null, timer = null;
 
-flatpickr("#datetime-picker", {
-  enableTime: true,
-  dateFormat: "d M Y at h:i K"
-});
-
-document.getElementById('start').addEventListener('click', () => {
-  const pickerValue = document.getElementById('datetime-picker')._flatpickr.selectedDates[0];
-  if (!pickerValue) return;
-  targetDate = pickerValue;
-  clearInterval(countdownInterval);
-  countdownInterval = setInterval(updateCountdown, 1000);
-});
-
-document.getElementById('reset').addEventListener('click', () => {
-  clearInterval(countdownInterval);
-  daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = 0;
-  targetDate = null;
-});
-
-function updateCountdown() {
-  const now = new Date();
-  const diff = targetDate - now;
-  if (diff <= 0) {
-    clearInterval(countdownInterval);
-    daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = 0;
+function diffParts(ms){
+  if(ms<0) ms=0;
+  const s=Math.floor(ms/1000);
+  return {days:Math.floor(s/86400), hours:Math.floor((s%86400)/3600), minutes:Math.floor((s%3600)/60), seconds:s%60};
+}
+function render(){
+  const dEl = document.getElementById("d"),
+        hEl = document.getElementById("h"),
+        mEl = document.getElementById("m"),
+        sEl = document.getElementById("s");
+  if(!target){
+    dEl.textContent="0"; hEl.textContent="00"; mEl.textContent="00"; sEl.textContent="00";
     return;
   }
-  daysEl.textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
-  hoursEl.textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  minutesEl.textContent = Math.floor((diff / (1000 * 60)) % 60);
-  secondsEl.textContent = Math.floor((diff / 1000) % 60);
+  const now = new Date(), rem = target - now;
+  const {days,hours,minutes,seconds} = diffParts(rem);
+  dEl.textContent = days;
+  hEl.textContent = String(hours).padStart(2,"0");
+  mEl.textContent = String(minutes).padStart(2,"0");
+  sEl.textContent = String(seconds).padStart(2,"0");
+  if(rem<=0){ clearInterval(timer); document.getElementById("subtitle").textContent = "LEVEL COMPLETE!"; }
 }
+function start(){
+  if(!target){ target=new Date(); }
+  if(timer) clearInterval(timer);
+  render();
+  timer = setInterval(render, 250);
+  document.getElementById("subtitle").textContent = `Counting down to ${target.toLocaleString()}`;
+}
+function reset(){
+  if(timer) clearInterval(timer);
+  target = null;
+  render();
+  document.getElementById("subtitle").textContent = "Pick a time below.";
+  const w = document.getElementById('when');
+  if(w._flatpickr) w._flatpickr.setDate(new Date(), true); else w.value = '';
+}
+
+function initPicker(){
+  const w = document.getElementById('when');
+  if(window.flatpickr){
+    flatpickr("#when", {
+      enableTime:true, time_24hr:true,
+      dateFormat:"Y-m-d H:i",
+      defaultDate:new Date(),
+      minuteIncrement:1,
+      onChange: d => { if(d[0]) target = d[0]; }
+    });
+  } else {
+    w.type = "datetime-local";
+    w.addEventListener("change", e => { if(e.target.value) target = new Date(e.target.value); });
+  }
+  // iOS focus helper: keep field centered when keyboard opens
+  w.addEventListener('focus', () => setTimeout(()=>w.scrollIntoView({block:'center', behavior:'smooth'}), 50), {passive:true});
+}
+
+document.getElementById("start").addEventListener("click", start);
+document.getElementById("reset").addEventListener("click", reset);
+initPicker();
+render();
 </script>
 </body>
 </html>
