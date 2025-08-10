@@ -13,88 +13,101 @@
 
 <style>
 :root{
-  --bg:#000016; --maze:#0a1a4f; --grid:#0b0f2a; --text:#0e1a2f; --muted:#4b63a6;
-  --accent:#ffb800; --accent-2:#00d6ff; --tile:#111b4a;
-  --pupSize:48px;         /* Pompompurin tile size (kept same) */
-  --pupOpacity:0.55;      /* opacity of Purin sprites */
-  --rainbowSize:18px;     /* size of rainbow confetti blocks */
-  --rainbowOpacity:0.25;  /* opacity of rainbow layer */
+  --fur:#f6de5a;
+  --fur-dark:#e6cf44;
+  --choco:#6a4a2c;
+  --cream:#fff9e6;
+  --pink:#ff9cc6;
+  --sky:#a7e2ff;
+  --sky-dark:#6cc7f0;
+  --pink-dark:#ff7fb4;
+  --shadow:#2b1a11;
+
+  --pupSize:48px;
+  --pupOpacity:0.55;
+  --rainbowSize:18px;
+  --rainbowOpacity:0.28;
+  --text:#432b1b;
 }
 *{box-sizing:border-box} html,body{height:100%}
 body{
   margin:0;
-  background:
-    linear-gradient(var(--grid) 1px, transparent 1px) 0 0/24px 24px,
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
-    var(--bg);
-  color:#e6f3ff; /* for title in page tab */
+  background:#fff;
+  color:var(--text);
   font-family:"Press Start 2P",system-ui,monospace;
   display:grid; place-items:center; padding:16px;
   image-rendering: pixelated;
 }
 .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
 
-/* ---------- White bezel with rainbow + Purin wallpaper ---------- */
+/* Background layers */
 .bezel{
-  position:relative; width:100%; min-height:68vh; border-radius:8px;
-  background:#ffffff; /* white base */
-  border:8px solid var(--maze); outline:4px solid #041034; overflow:hidden;
-  display:flex; align-items:center; justify-content:center; padding:16px;
+  position:relative; width:100%; min-height:68vh;
+  background:#fff; overflow:hidden; padding:16px;
+  border:8px solid var(--choco);
+  outline:6px solid var(--shadow);
+  box-shadow:0 10px 0 0 rgba(0,0,0,.08), 0 22px 40px rgba(0,0,0,.2);
 }
-/* Layer 1: rainbow pixel confetti (behind Purin) */
 .bezel::before{
   content:""; position:absolute; inset:0; z-index:0; opacity:var(--rainbowOpacity);
   image-rendering: pixelated;
   background-repeat:repeat; background-size:var(--rainbowSize) var(--rainbowSize);
-  /* 16x16 tile, white base with 2x2 coloured squares scattered */
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'><rect width='16' height='16' fill='white'/><rect x='1' y='1' width='2' height='2' fill='%23ff4d4d'/><rect x='5' y='2' width='2' height='2' fill='%23ffa64d'/><rect x='12' y='1' width='2' height='2' fill='%23ffeb00'/><rect x='3' y='7' width='2' height='2' fill='%235de36b'/><rect x='9' y='6' width='2' height='2' fill='%234db2ff'/><rect x='13' y='7' width='2' height='2' fill='%23b36bff'/><rect x='2' y='12' width='2' height='2' fill='%23ffeb00'/><rect x='7' y='12' width='2' height='2' fill='%23ff4d4d'/><rect x='12' y='12' width='2' height='2' fill='%234db2ff'/></svg>");
 }
-/* Layer 2: Pompompurin sprites (on top of rainbow, still behind content) */
 .bezel::after{
   content:""; position:absolute; inset:0; z-index:0; opacity:var(--pupOpacity);
   image-rendering: pixelated; background-repeat:repeat;
   background-size:var(--pupSize) var(--pupSize);
-  /* Pompompurin pixel sprite (SVG) — same design as before */
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'><rect width='24' height='24' fill='none'/><g fill='%23f6de5a'><rect x='5' y='8' width='1' height='1'/><rect x='6' y='8' width='1' height='1'/><rect x='7' y='8' width='1' height='1'/><rect x='4' y='9' width='1' height='1'/><rect x='5' y='9' width='1' height='1'/><rect x='6' y='9' width='1' height='1'/><rect x='7' y='9' width='1' height='1'/><rect x='8' y='9' width='1' height='1'/><rect x='3' y='10' width='1' height='1'/><rect x='4' y='10' width='1' height='1'/><rect x='5' y='10' width='1' height='1'/><rect x='6' y='10' width='1' height='1'/><rect x='7' y='10' width='1' height='1'/><rect x='8' y='10' width='1' height='1'/><rect x='9' y='10' width='1' height='1'/><rect x='3' y='11' width='1' height='1'/><rect x='4' y='11' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='6' y='11' width='1' height='1'/><rect x='7' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='9' y='11' width='1' height='1'/><rect x='2' y='12' width='1' height='1'/><rect x='3' y='12' width='1' height='1'/><rect x='4' y='12' width='1' height='1'/><rect x='5' y='12' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/><rect x='7' y='12' width='1' height='1'/><rect x='8' y='12' width='1' height='1'/><rect x='9' y='12' width='1' height='1'/><rect x='10' y='12' width='1' height='1'/><rect x='2' y='13' width='1' height='1'/><rect x='3' y='13' width='1' height='1'/><rect x='4' y='13' width='1' height='1'/><rect x='5' y='13' width='1' height='1'/><rect x='6' y='13' width='1' height='1'/><rect x='7' y='13' width='1' height='1'/><rect x='8' y='13' width='1' height='1'/><rect x='9' y='13' width='1' height='1'/><rect x='3' y='14' width='1' height='1'/><rect x='4' y='14' width='1' height='1'/><rect x='5' y='14' width='1' height='1'/><rect x='6' y='14' width='1' height='1'/><rect x='7' y='14' width='1' height='1'/><rect x='8' y='14' width='1' height='1'/></g><g fill='%236a4a2c'><rect x='5' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='7' y='7' width='1' height='1'/><rect x='4' y='8' width='1' height='1'/><rect x='8' y='8' width='1' height='1'/><rect x='2' y='9' width='1' height='1'/><rect x='1' y='9' width='1' height='1'/><rect x='10' y='9' width='1' height='1'/><rect x='11' y='9' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/></g><g fill='%23ffcc66'><rect x='5' y='13' width='1' height='1'/><rect x='6' y='13' width='1' height='1'/><rect x='7' y='13' width='1' height='1'/></g></svg>");
 }
 
 /* Content */
 .panel{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:14px; width:100%}
-h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--accent); text-shadow:0 0 2px rgba(0,0,0,.15)}
-.subtitle{color:#3d4e7f; font-size:clamp(10px,3.3vw,12px)}
+h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--choco)}
+.subtitle{color:#7b5a45; font-size:clamp(10px,3.3vw,12px)}
 
-/* Board (solid boxes for clarity) */
-.board{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:min(640px,92vw)}
-.cell{background:#0a1340; border:4px solid var(--maze); border-radius:4px; padding:12px 8px}
-.num{font-size:clamp(22px,8.5vw,42px); line-height:1; color:#fff}
-.label{margin-top:6px; color:var(--accent-2); font-size:clamp(9px,2.8vw,10px)}
+.board{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; width:min(640px,92vw)}
+.cell{
+  background:var(--fur);
+  border:6px solid var(--fur-dark);
+  outline:6px solid var(--choco);
+  box-shadow:0 6px 0 0 rgba(0,0,0,.08);
+  padding:14px 10px; border-radius:0;
+}
+.num{font-size:clamp(24px,8.5vw,44px); color:var(--choco)}
+.label{margin-top:6px; color:var(--sky); font-size:clamp(9px,2.8vw,10px)}
 
-/* Controls */
 .controls{display:grid; gap:10px; width:min(640px,92vw)}
 .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
 input,button{
-  font:16px/1 "Press Start 2P",monospace;
-  color:#0e1a2f; background:#ffffff;
-  border:4px solid var(--maze); border-radius:4px; padding:12px 14px;
+  font:16px/1 "Press Start 2P",monospace; color:var(--text);
+  border-radius:0; border:6px solid var(--choco); outline:6px solid var(--shadow);
+  padding:12px 14px; background:#fff;
 }
-button{cursor:pointer; background:var(--accent-2); color:#00121c; min-width:140px}
-.secondary{background:#14235e; color:#cfe4ff}
-footer{margin-top:6px; color:#3d4e7f; font-size:10px}
+button{cursor:pointer; min-width:140px; color:var(--choco)}
+#start{ background:var(--sky) }
+#start:hover{ background:var(--sky-dark) }
+#reset{ background:var(--pink) }
+#reset:hover{ background:var(--pink-dark) }
+footer{margin-top:6px; color:#7b5a45; font-size:10px}
 
-/* Flatpickr theme (matches palette) */
+/* Flatpickr */
 .flatpickr-calendar{
   font-family:"Press Start 2P",monospace;
-  background:#ffffff; border:4px solid var(--maze); color:#0e1a2f;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  background:#fff; color:var(--text);
+  border:6px solid var(--choco) !important;
+  outline:6px solid var(--shadow);
+  box-shadow:0 16px 40px rgba(0,0,0,.25);
+  border-radius:0;
 }
 .flatpickr-months .flatpickr-month, .flatpickr-weekdays{
-  background:#eaf0ff; color:#0e1a2f; border-bottom:1px solid #bcc8ff;
+  background:var(--fur); color:var(--choco); border-bottom:4px solid var(--fur-dark);
 }
-.flatpickr-day:hover{background:#eaf6ff}
-.flatpickr-day.today{background:#eaf6ff; border:1px solid #bcc8ff}
-.flatpickr-day.selected{background:var(--accent-2); color:#00121c}
-.flatpickr-time{border-top:1px solid #bcc8ff}
-.flatpickr-time input{color:#0e1a2f; background:#fff; border:none}
+.flatpickr-day{border-radius:0}
+.flatpickr-day:hover{background:#fff1f8}
+.flatpickr-day.today{background:#e9f7ff; border:1px solid var(--sky-dark)}
+.flatpickr-day.selected{background:var(--pink); color:var(--choco)}
+.flatpickr-time{border-top:4px solid var(--fur-dark)}
 
 @media (max-width:420px){
   .board{grid-template-columns:repeat(2,1fr)}
@@ -108,95 +121,74 @@ footer{margin-top:6px; color:#3d4e7f; font-size:10px}
     <div class="panel">
       <h1 id="title">COUNTYDOWN</h1>
       <div class="subtitle" id="subtitle">Pick a time below.</div>
-
       <section>
-        <div class="board" role="timer" aria-live="polite" aria-atomic="true">
+        <div class="board">
           <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
           <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
           <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
           <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
         </div>
-
-        <div class="controls">
+      </section>
+      <section class="controls">
+        <div class="row">
           <input id="when" type="text" placeholder="Select date & time" />
-          <input id="label" type="text" placeholder="Event name" />
-          <div class="row">
-            <button id="start">START</button>
-            <button id="reset" class="secondary">RESET</button>
-          </div>
+        </div>
+        <div class="row">
+          <button id="start">Start</button>
+          <button id="reset">Reset</button>
         </div>
       </section>
-
-      <footer id="footer"></footer>
+      <footer>Made with ❤️ Pompompurin style</footer>
     </div>
   </div>
 </main>
 
-<!-- Flatpickr JS (pinned). Fallback to native if blocked -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" onerror="fallbackPicker()"></script>
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <script>
-function fallbackPicker(){ document.getElementById('when').type = 'datetime-local'; }
-
-const $ = id => document.getElementById(id);
-const pad = n => String(n).padStart(2,'0');
-const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time';
-
-let target = new Date();
-let tickId = null;
-
-$('footer').textContent = `Now: ${new Date().toLocaleString()} — ${tz}`;
-
+let target = null, timer = null;
+function update(){
+  if(!target) return;
+  let diff = target - new Date();
+  if(diff < 0) diff = 0;
+  let s = Math.floor(diff/1000)%60;
+  let m = Math.floor(diff/60000)%60;
+  let h = Math.floor(diff/3600000)%24;
+  let d = Math.floor(diff/86400000);
+  document.getElementById("d").textContent = d;
+  document.getElementById("h").textContent = String(h).padStart(2,"0");
+  document.getElementById("m").textContent = String(m).padStart(2,"0");
+  document.getElementById("s").textContent = String(s).padStart(2,"0");
+}
+function start(){
+  if(timer) clearInterval(timer);
+  update();
+  timer = setInterval(update,1000);
+}
+function reset(){
+  if(timer) clearInterval(timer);
+  target = null;
+  document.querySelectorAll(".num").forEach(el=>el.textContent="00");
+}
 function initPicker(){
   if(window.flatpickr){
-    flatpickr("#when", {
+    flatpickr("#when",{
       enableTime:true, time_24hr:true,
       dateFormat:"Y-m-d H:i",
-      defaultDate: target,
-      minuteIncrement: 1,
-      onChange: d => { if(d[0]) target = d[0]; }
+      defaultDate:new Date(),
+      minuteIncrement:1,
+      onChange:d=>{ if(d[0]) target = d[0]; }
     });
   } else {
-    fallbackPicker();
+    document.getElementById("when").type = "datetime-local";
+    document.getElementById("when").addEventListener("change", e=>{
+      target = new Date(e.target.value);
+    });
   }
 }
-
-function diffParts(ms){
-  if(ms<0) ms=0;
-  const s=Math.floor(ms/1000);
-  return {days:Math.floor(s/86400), hours:Math.floor((s%86400)/3600), minutes:Math.floor((s%3600)/60), seconds:s%60};
-}
-function update(){
-  const now = new Date();
-  const rem = target - now;
-  const {days,hours,minutes,seconds} = diffParts(rem);
-  $('d').textContent = days;
-  $('h').textContent = pad(hours);
-  $('m').textContent = pad(minutes);
-  $('s').textContent = pad(seconds);
-  if(rem<=0){ clearInterval(tickId); $('subtitle').textContent = `LEVEL COMPLETE!`; }
-}
-function startTimer(){
-  clearInterval(tickId);
-  tickId = setInterval(update, 250);
-  update();
-  $('subtitle').textContent = `Counting down to ${target.toLocaleString()} (${tz})`;
-}
-$('start').addEventListener('click', ()=>{
-  const title = $('label').value.trim();
-  $('title').textContent = title || 'COUNTYDOWN';
-  startTimer();
-});
-$('reset').addEventListener('click', ()=>{
-  target = new Date();
-  const w = document.querySelector('#when');
-  if(w._flatpickr) w._flatpickr.setDate(target, true); else w.value = '';
-  $('label').value = '';
-  $('title').textContent = 'COUNTYDOWN';
-  $('subtitle').textContent = 'Pick a time below.';
-  startTimer();
-});
-update();
-document.addEventListener('DOMContentLoaded', initPicker);
+document.getElementById("start").addEventListener("click",start);
+document.getElementById("reset").addEventListener("click",reset);
+initPicker();
 </script>
 </body>
 </html>
