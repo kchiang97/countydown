@@ -22,27 +22,23 @@
     display:grid; place-items:center; padding:16px; -webkit-tap-highlight-color:transparent;
     image-rendering: pixelated; overflow-x:hidden;
   }
-  .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center; position:relative}
+  .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
 
-  /* --------- tiled wallpaper behind UI --------- */
-  .wallpaper{
-    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
-    opacity:.20; /* subtle */
+  /* ---------- BEZEL WITH POMPOMPURIN WALLPAPER ---------- */
+  .bezel{
+    position:relative; z-index:1;
+    width:100%; padding:14px; border-radius:8px;
+    background:linear-gradient(180deg,#0d1f66,#08133a);
+    border:8px solid var(--maze); outline:4px solid #041034;
+    box-shadow:0 0 0 6px #000, 0 12px 0 0 #0006, 0 20px 40px rgba(0,0,0,.7);
+    overflow:hidden;
   }
-  .wallpaper .sprite{
-    position:absolute; width:14px; height:12px; /* smaller than foreground */
-    transform: translate(-50%,-50%); image-rendering: pixelated;
-    filter:none; /* softer */
-  }
-  .wallpaper .pix{ width:2px; height:2px; position:relative }
-  .wallpaper i{ display:block; position:absolute; width:2px; height:2px }
-
-  /* colors */
-  .y{ background:#f6de5a }  /* golden body */
-  .b{ background:#6a4a2c }  /* brown details */
-  .p{ background:#ffcc66 }  /* belly */
-
-  /* seed + box-shadows to “draw” the pup */
+  /* solid wallpaper tiles inside bezel */
+  .bezel-wall{ position:absolute; inset:0; z-index:0; pointer-events:none }
+  .bezel-wall .sprite{ position:absolute; width:14px; height:12px; transform:translate(-50%,-50%); image-rendering:pixelated }
+  .bezel-wall .pix{ width:2px; height:2px; position:relative }
+  .bezel-wall i{ display:block; position:absolute; width:2px; height:2px }
+  .y{ background:#f6de5a }  .b{ background:#6a4a2c }  .p{ background:#ffcc66 }
   .body{ width:2px; height:2px; background:#f6de5a }
   .body.y{ box-shadow:
     10px 6px #f6de5a, 12px 6px #f6de5a, 14px 6px #f6de5a,
@@ -62,32 +58,59 @@
   .nose.b{ box-shadow: 13px 16px #6a4a2c }
   .belly.p{ box-shadow: 10px 20px #ffcc66, 12px 20px #ffcc66, 14px 20px #ffcc66 }
 
-  /* bezel and UI */
-  .bezel{
-    width:100%; padding:14px; background:linear-gradient(180deg,#0d1f66,#08133a);
-    border:8px solid var(--maze); outline:4px solid #041034; border-radius:6px;
-    box-shadow:0 0 0 6px #000, 0 12px 0 0 #0006, 0 20px 40px rgba(0,0,0,.7);
-    position:relative; z-index:1;
+  /* center glaze = slightly transparent only under content area */
+  .bezel::after{
+    content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+    background: radial-gradient(80% 80% at 50% 50%, rgba(3,12,38,.35) 0%, rgba(3,12,38,.55) 55%, rgba(3,12,38,.8) 100%);
   }
-  h1{margin:0 0 6px; font-size:clamp(18px,5.5vw,28px); letter-spacing:1px; color:var(--accent); text-shadow:0 0 8px rgba(255,235,0,.35),0 0 2px #000; word-break:break-word}
-  .subtitle{color:var(--muted); font-size:clamp(10px,3.3vw,12px); line-height:1.6}
+
+  h1{margin:0 0 6px; font-size:clamp(18px,5.5vw,28px); letter-spacing:1px; color:var(--accent); text-shadow:0 0 8px rgba(255,235,0,.35),0 0 2px #000; word-break:break-word; position:relative; z-index:1}
+  .subtitle{color:var(--muted); font-size:clamp(10px,3.3vw,12px); line-height:1.6; position:relative; z-index:1}
 
   /* timer board */
-  .board{margin-top:10px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px}
+  .board{margin-top:10px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; position:relative; z-index:1}
   .cell{background:#0a1340; border:4px solid var(--maze); outline:2px solid #020824; border-radius:4px; padding:12px 8px; box-shadow:inset 0 0 0 4px #020b2c}
   .num{font-variant-numeric:tabular-nums; font-size:clamp(22px,8.5vw,42px); line-height:1; color:#fff; text-shadow:0 0 6px rgba(122,160,255,.45)}
   .label{margin-top:6px; color:var(--accent-2); font-size:clamp(9px,2.8vw,10px); letter-spacing:.08em}
 
-  /* pellet progress */
-  .progress{margin:12px 0 4px; display:grid; grid-template-columns:repeat(24,1fr); gap:6px}
+  /* pellet progress + Purin-Chomper */
+  .progress{margin:12px 0 10px; display:grid; grid-template-columns:repeat(24,1fr); gap:6px; position:relative; z-index:1}
   .pellet{width:100%; aspect-ratio:1; background:#09123b; border:3px solid var(--maze); outline:2px solid #020824; border-radius:2px; box-shadow:inset 0 0 0 3px #020b2c}
   .pellet.filled{background:var(--accent); border-color:#cdbd00; box-shadow:0 0 8px rgba(255,235,0,.55), inset 0 0 0 3px #473f00}
+  .pellet.eaten{background:transparent; border-color:#051034; box-shadow:none; outline-color:transparent; opacity:.18}
 
-  .legend{margin-top:6px; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; font-size:10px; color:var(--muted)}
+  /* Purin-Chomper (Pompompurin-ish Pac-Man) */
+  .chomper{
+    --size: 20px;
+    position:absolute; top:50%; transform:translate(-50%,-50%);
+    width:var(--size); height:var(--size); z-index:2; pointer-events:none;
+  }
+  /* head (yellow circle) */
+  .chomper .head{
+    position:absolute; inset:0; background:#f6de5a; border-radius:50%;
+    box-shadow:0 0 8px rgba(255,235,0,.35);
+    /* mouth opens/closes by masking a wedge */
+    -webkit-mask: radial-gradient(closest-side, #000 98%, transparent 100%) content-box, 
+                  conic-gradient(#000 0deg, #000 var(--open), transparent calc(var(--open) + 2deg), transparent calc(360deg - var(--open)), #000 360deg);
+            mask: radial-gradient(closest-side, #000 98%, transparent 100%) content-box, 
+                  conic-gradient(#000 0deg, #000 var(--open), transparent calc(var(--open) + 2deg), transparent calc(360deg - var(--open)), #000 360deg);
+    -webkit-mask-composite: source-out, xor; mask-composite: exclude;
+    animation: chomp 0.28s steps(2) infinite;
+  }
+  /* beret */
+  .chomper .beret{ position:absolute; left:30%; top:-6%; width:40%; height:28%; background:#6a4a2c; border-radius:50% 50% 40% 40%/60% 60% 40% 40%; transform:rotate(-5deg) }
+  .chomper .stem{ position:absolute; left:48%; top:-10%; width:6%; height:10%; background:#6a4a2c; border-radius:2px }
+
+  @keyframes chomp{
+    0%,100%{ --open: 28deg }
+    50%{ --open: 4deg }
+  }
+
+  .legend{margin-top:6px; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; font-size:10px; color:var(--muted); position:relative; z-index:1}
   .dot{display:inline-block; width:10px; height:10px; background:var(--accent); margin-right:6px; vertical-align:-1px; box-shadow:0 0 6px rgba(255,235,0,.55)}
 
   /* controls */
-  .controls{margin-top:12px; display:grid; grid-template-columns:1fr; gap:10px; justify-items:center}
+  .controls{margin-top:12px; display:grid; grid-template-columns:1fr; gap:10px; justify-items:center; position:relative; z-index:1}
   .row{display:flex; gap:10px; width:100%; justify-content:center; flex-wrap:wrap}
   input,button{
     font:16px/1 "Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Arial, monospace;
@@ -97,28 +120,34 @@
   input[type="text"]{width:min(420px,90vw)}
   button{cursor:pointer; background:var(--accent-2); color:#00121c; min-width:140px}
   .secondary{background:#14235e; color:#cfe4ff}
-  footer{margin-top:6px; color:var(--muted); font-size:10px}
+  footer{margin-top:6px; color:var(--muted); font-size:10px; position:relative; z-index:1}
 
   /* small phones */
   @media (max-width:420px){
     .board{grid-template-columns:repeat(2,minmax(0,1fr))}
     .progress{grid-template-columns:repeat(16,1fr); gap:5px}
     .pellet{outline-width:1px; border-width:2px}
+    .chomper{ --size: 18px }
     button{min-width:44vw}
   }
 </style>
 </head>
 <body>
-  <!-- tiled sprite wallpaper -->
-  <div class="wallpaper" id="wall"></div>
-
   <main class="wrap">
     <div class="bezel">
+      <!-- solid pup wallpaper inside bezel -->
+      <div class="bezel-wall" id="wall"></div>
+
       <h1 id="title">COUNTYDOWN</h1>
       <div class="subtitle" id="subtitle">Pick a time below.</div>
 
-      <!-- pellets -->
-      <div class="progress" id="progress" aria-hidden="true"></div>
+      <!-- pellet progress with Purin-Chomper -->
+      <div class="progress" id="progress" aria-hidden="false">
+        <div class="chomper" id="chomper" style="left:0%">
+          <div class="head"></div>
+          <div class="beret"></div><div class="stem"></div>
+        </div>
+      </div>
 
       <!-- timer -->
       <section>
@@ -163,7 +192,10 @@
   // pellets
   const progressBar = $('progress');
   const PELLETS = getComputedStyle(progressBar).gridTemplateColumns.split(' ').length || 24;
-  for (let i=0;i<PELLETS;i++){ const p=document.createElement('div'); p.className='pellet'; progressBar.appendChild(p); }
+  for (let i=0;i<PELLETS;i++){ const p=document.createElement('div'); p.className='pellet filled'; progressBar.appendChild(p); }
+
+  // Purin-Chomper
+  const chomper = $('chomper');
 
   // init UI
   $('title').textContent = decodeURIComponent(initialTitle);
@@ -185,10 +217,21 @@
   }
   function readPicker(){ const v=$('when').value; return v ? new Date(v) : null; }
 
-  function updatePellets(fracRemaining){
-    const pellets = progressBar.children;
-    const filled = Math.round(PELLETS * fracRemaining);
-    for (let i=0;i<PELLETS;i++){ pellets[i].classList.toggle('filled', i < filled); }
+  function updatePellets(fracElapsed){
+    // eat pellets from left to right
+    const pellets = [...progressBar.querySelectorAll('.pellet')];
+    const idx = Math.floor(fracElapsed * PELLETS);
+    pellets.forEach((p,i)=>{
+      p.classList.toggle('eaten', i < idx);
+      p.classList.toggle('filled', i >= idx);
+    });
+    // move chomper
+    const barRect = progressBar.getBoundingClientRect();
+    const startX = 0; // left % relative to bar
+    const endX = 100;
+    const xPct = Math.min(endX, Math.max(startX, (fracElapsed * 100)));
+    chomper.style.left = xPct + '%';
+    // face direction (right); if you want reverse when past half, flip here
   }
 
   function update(){
@@ -203,10 +246,14 @@
 
     const span = Math.max(1, target - startTime);
     const elapsed = Math.min(Math.max(0, now - startTime), span);
-    const fracRemaining = 1 - (elapsed / span);
-    updatePellets(fracRemaining);
+    const fracElapsed = elapsed / span;
 
-    if (remaining <= 0){ clearInterval(tickId); tickId = null; finish(); }
+    updatePellets(fracElapsed);
+
+    if (remaining <= 0){
+      clearInterval(tickId); tickId = null;
+      finish();
+    }
   }
 
   function startTimer(){
@@ -220,7 +267,7 @@
   function finish(){
     $('subtitle').textContent = `LEVEL COMPLETE! (${target.toLocaleString()})`;
     document.title = 'LEVEL COMPLETE! 🎉';
-    updatePellets(0);
+    updatePellets(1);
   }
 
   $('start').addEventListener('click', ()=>{
@@ -241,15 +288,11 @@
     startTimer();
   });
 
-  /* --------- build Pompompurin wallpaper grid --------- */
+  /* --------- build Pompompurin wallpaper grid inside bezel ---------- */
   const wall = document.getElementById('wall');
-
-  function makeSpriteInto(container, xPct, yPct){
-    const s = document.createElement('div');
-    s.className = 'sprite';
-    s.style.left = xPct + '%';
-    s.style.top  = yPct + '%';
-
+  function makeTile(container, xPct, yPct){
+    const s = document.createElement('div'); s.className = 'sprite';
+    s.style.left = xPct + '%'; s.style.top  = yPct + '%';
     const pix = document.createElement('div'); pix.className = 'pix';
     const body = document.createElement('i'); body.className = 'body y';
     const beret= document.createElement('i'); beret.className= 'beret b';
@@ -259,31 +302,23 @@
     const nose = document.createElement('i'); nose.className = 'nose b';
     const belly= document.createElement('i'); belly.className= 'belly p';
     pix.append(body, beret, earL, earR, eyes, nose, belly);
-    s.appendChild(pix);
-    container.appendChild(s);
+    s.appendChild(pix); container.appendChild(s);
   }
-
   function buildWallpaper(){
     wall.innerHTML = '';
     const small = matchMedia('(max-width: 480px)').matches;
     const cols = small ? 8 : 14;
     const rows = small ? 10 : 9;
-
-    for(let r=0; r<rows; r++){
-      for(let c=0; c<cols; c++){
-        // checkerboard offset for visual rhythm
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
         const x = ((c + 0.5) * (100 / cols)) + ((r % 2) ? (50 / cols) : 0);
         const y = (r + 0.5) * (100 / rows);
-        makeSpriteInto(wall, x > 100 ? x - 100 : x, y);
+        makeTile(wall, x > 100 ? x - 100 : x, y);
       }
     }
   }
-
   buildWallpaper();
-  addEventListener('resize', () => {
-    clearTimeout(window._wallT);
-    window._wallT = setTimeout(buildWallpaper, 150);
-  });
+  addEventListener('resize', ()=>{ clearTimeout(window._wallT); window._wallT=setTimeout(buildWallpaper,150); });
 
   // auto-start if URL had ?until=
   if (initialISO){ startTimer(); } else { update(); }
