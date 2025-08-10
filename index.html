@@ -20,29 +20,29 @@
     color:var(--text);
     font-family:"Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Arial, monospace;
     display:grid; place-items:center; padding:16px; -webkit-tap-highlight-color:transparent;
-    image-rendering: pixelated;
-    overflow-x:hidden;
+    image-rendering: pixelated; overflow-x:hidden;
   }
   .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center; position:relative}
 
-  /* --- Tiny Pompompurin-like sprites (fixed) --- */
-  .sprite{
-    position:absolute; width:18px; height:16px;
-    transform: translate(-50%, -50%);
-    image-rendering: pixelated;
-    filter: drop-shadow(0 0 6px rgba(255,235,0,.25));
-    pointer-events:none; z-index:2; /* above bezel */
+  /* --------- tiled wallpaper behind UI --------- */
+  .wallpaper{
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+    opacity:.20; /* subtle */
   }
-  .sprite .pix{ width:2px; height:2px; position:relative }
-  /* ensure layers have size so box-shadows draw */
-  .sprite i{ display:block; position:absolute; width:2px; height:2px }
+  .wallpaper .sprite{
+    position:absolute; width:14px; height:12px; /* smaller than foreground */
+    transform: translate(-50%,-50%); image-rendering: pixelated;
+    filter:none; /* softer */
+  }
+  .wallpaper .pix{ width:2px; height:2px; position:relative }
+  .wallpaper i{ display:block; position:absolute; width:2px; height:2px }
 
   /* colors */
-  .y{ background:#f6de5a }   /* golden body */
-  .b{ background:#6a4a2c }   /* brown details */
-  .p{ background:#ffcc66 }   /* belly */
+  .y{ background:#f6de5a }  /* golden body */
+  .b{ background:#6a4a2c }  /* brown details */
+  .p{ background:#ffcc66 }  /* belly */
 
-  /* seed + box-shadow pixels */
+  /* seed + box-shadows to “draw” the pup */
   .body{ width:2px; height:2px; background:#f6de5a }
   .body.y{ box-shadow:
     10px 6px #f6de5a, 12px 6px #f6de5a, 14px 6px #f6de5a,
@@ -61,12 +61,6 @@
   .eyes.b{ box-shadow: 10px 14px #6a4a2c, 16px 14px #6a4a2c }
   .nose.b{ box-shadow: 13px 16px #6a4a2c }
   .belly.p{ box-shadow: 10px 20px #ffcc66, 12px 20px #ffcc66, 14px 20px #ffcc66 }
-
-  @keyframes floaty {
-    0%{ transform: translate(-50%,-50%) translateY(0) }
-    50%{ transform: translate(-50%,-50%) translateY(-6px) }
-    100%{ transform: translate(-50%,-50%) translateY(0) }
-  }
 
   /* bezel and UI */
   .bezel{
@@ -115,8 +109,10 @@
 </style>
 </head>
 <body>
-  <main class="wrap" id="canvas">
-    <!-- sprites get injected around the canvas -->
+  <!-- tiled sprite wallpaper -->
+  <div class="wallpaper" id="wall"></div>
+
+  <main class="wrap">
     <div class="bezel">
       <h1 id="title">COUNTYDOWN</h1>
       <div class="subtitle" id="subtitle">Pick a time below.</div>
@@ -245,46 +241,49 @@
     startTimer();
   });
 
-  // ----- Tiny Pompompurin-ish sprites -----
-  const canvas = document.getElementById('canvas');
-  const isSmall = window.matchMedia('(max-width: 480px)').matches;
-  const SPRITES = isSmall ? 10 : 18;
+  /* --------- build Pompompurin wallpaper grid --------- */
+  const wall = document.getElementById('wall');
 
-  function makeSprite(xPct, yPct, delay){
+  function makeSpriteInto(container, xPct, yPct){
     const s = document.createElement('div');
     s.className = 'sprite';
     s.style.left = xPct + '%';
-    s.style.top = yPct + '%';
-    s.style.animation = `floaty ${4 + Math.random()*3}s ease-in-out ${delay}s infinite`;
-    s.setAttribute('aria-hidden','true');
+    s.style.top  = yPct + '%';
 
     const pix = document.createElement('div'); pix.className = 'pix';
     const body = document.createElement('i'); body.className = 'body y';
-    const beret = document.createElement('i'); beret.className = 'beret b';
+    const beret= document.createElement('i'); beret.className= 'beret b';
     const earL = document.createElement('i'); earL.className = 'earL b';
     const earR = document.createElement('i'); earR.className = 'earR b';
     const eyes = document.createElement('i'); eyes.className = 'eyes b';
     const nose = document.createElement('i'); nose.className = 'nose b';
-    const belly = document.createElement('i'); belly.className = 'belly p';
-
+    const belly= document.createElement('i'); belly.className= 'belly p';
     pix.append(body, beret, earL, earR, eyes, nose, belly);
     s.appendChild(pix);
-    canvas.appendChild(s);
+    container.appendChild(s);
   }
 
-  function scatterSprites(){
-    for(let i=0;i<SPRITES;i++){
-      const ring = i % 4;
-      let x = 5 + Math.random()*90;
-      let y = 5 + Math.random()*90;
-      if(ring===0) y = 5 + Math.random()*15;
-      if(ring===1) y = 85 + Math.random()*10;
-      if(ring===2) x = 5 + Math.random()*15;
-      if(ring===3) x = 85 + Math.random()*10;
-      makeSprite(x, y, Math.random()*2);
+  function buildWallpaper(){
+    wall.innerHTML = '';
+    const small = matchMedia('(max-width: 480px)').matches;
+    const cols = small ? 8 : 14;
+    const rows = small ? 10 : 9;
+
+    for(let r=0; r<rows; r++){
+      for(let c=0; c<cols; c++){
+        // checkerboard offset for visual rhythm
+        const x = ((c + 0.5) * (100 / cols)) + ((r % 2) ? (50 / cols) : 0);
+        const y = (r + 0.5) * (100 / rows);
+        makeSpriteInto(wall, x > 100 ? x - 100 : x, y);
+      }
     }
   }
-  scatterSprites();
+
+  buildWallpaper();
+  addEventListener('resize', () => {
+    clearTimeout(window._wallT);
+    window._wallT = setTimeout(buildWallpaper, 150);
+  });
 
   // auto-start if URL had ?until=
   if (initialISO){ startTimer(); } else { update(); }
