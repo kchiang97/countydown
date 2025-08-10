@@ -79,7 +79,6 @@ input,button{
 button{cursor:pointer; min-width:140px; color:var(--choco)}
 #start{ background:var(--sky) } #start:hover{ background:var(--sky-dark) }
 #reset{ background:var(--pink) } #reset:hover{ background:var(--pink-dark) }
-footer{margin-top:6px; color:#7b5a45; font-size:10px}
 
 /* Flatpickr (pastel + pixel borders) */
 .flatpickr-calendar{
@@ -96,20 +95,28 @@ footer{margin-top:6px; color:#7b5a45; font-size:10px}
 .flatpickr-day.selected{background:var(--pink); color:var(--choco)}
 .flatpickr-time{border-top:4px solid var(--fur-dark)}
 
-/* ===== Portrait tweaks ===== */
+/* ===== Portrait tweaks (no stretched bars) ===== */
 @media (max-width: 480px) {
   .bezel{ min-height:100vh; padding:12px; }
   .panel{ gap:12px }
+
+  /* softer wallpaper so text pops */
   :root{ --rainbowOpacity:0.18; --pupOpacity:0.42; --pupSize:40px; }
+
+  /* 2×2 timer grid */
   .board{ grid-template-columns:repeat(2,1fr); gap:10px; width:100%; }
+
+  /* thinner borders, bigger numbers */
   .cell{ padding:12px 8px; border-width:4px; outline-width:4px; box-shadow:none; }
   .num{ font-size:clamp(28px,12vw,46px) }
   .label{ font-size:10px }
-  .controls{ gap:8px; width:100% }
-  .row{ gap:8px }
+
+  /* compact controls card (no full-width bars) */
+  .controls{ width:92vw; max-width:340px; margin:0 auto; gap:8px; }
+  .row{ gap:8px; justify-content:center; }
   input,button{ width:100%; border-width:4px; outline-width:4px; padding:12px; }
 }
-/* Ultra narrow phones */
+/* ultra narrow phones: 1×4 grid */
 @media (max-width: 340px){ .board{ grid-template-columns:1fr } }
 </style>
 </head>
@@ -136,8 +143,7 @@ footer{margin-top:6px; color:#7b5a45; font-size:10px}
           <button id="reset">Reset</button>
         </div>
       </section>
-
-      <footer>Made with ❤️ Pompompurin style</footer>
+      <!-- footer removed per request -->
     </div>
   </div>
 </main>
@@ -153,16 +159,20 @@ function diffParts(ms){
   return {days:Math.floor(s/86400), hours:Math.floor((s%86400)/3600), minutes:Math.floor((s%3600)/60), seconds:s%60};
 }
 function render(){
-  if(!target){ document.getElementById("d").textContent="0";
-               document.getElementById("h").textContent="00";
-               document.getElementById("m").textContent="00";
-               document.getElementById("s").textContent="00"; return; }
+  const dEl = document.getElementById("d"),
+        hEl = document.getElementById("h"),
+        mEl = document.getElementById("m"),
+        sEl = document.getElementById("s");
+  if(!target){
+    dEl.textContent="0"; hEl.textContent="00"; mEl.textContent="00"; sEl.textContent="00";
+    return;
+  }
   const now = new Date(), rem = target - now;
   const {days,hours,minutes,seconds} = diffParts(rem);
-  document.getElementById("d").textContent = days;
-  document.getElementById("h").textContent = String(hours).padStart(2,"0");
-  document.getElementById("m").textContent = String(minutes).padStart(2,"0");
-  document.getElementById("s").textContent = String(seconds).padStart(2,"0");
+  dEl.textContent = days;
+  hEl.textContent = String(hours).padStart(2,"0");
+  mEl.textContent = String(minutes).padStart(2,"0");
+  sEl.textContent = String(seconds).padStart(2,"0");
   if(rem<=0){ clearInterval(timer); document.getElementById("subtitle").textContent = "LEVEL COMPLETE!"; }
 }
 function start(){
@@ -195,7 +205,7 @@ function initPicker(){
     w.type = "datetime-local";
     w.addEventListener("change", e => { if(e.target.value) target = new Date(e.target.value); });
   }
-  // iOS focus helper: keep field centered when opening keyboard
+  // iOS focus helper: keep field centered when keyboard opens
   w.addEventListener('focus', () => setTimeout(()=>w.scrollIntoView({block:'center', behavior:'smooth'}), 50), {passive:true});
 }
 
