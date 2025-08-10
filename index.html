@@ -5,19 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Countydown</title>
 
-<!-- Pixel font -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<!-- Flatpickr (pinned) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
 
 <style>
 :root{
-  /* Pompompurin pastel palette */
   --fur:#f6de5a; --fur-dark:#e6cf44; --choco:#6a4a2c; --cream:#fff9e6;
   --pink:#ff9cc6; --pink-dark:#ff7fb4; --sky:#a7e2ff; --sky-dark:#6cc7f0;
   --shadow:#2b1a11; --text:#432b1b;
-
-  /* Background confetti + Purin tiles */
   --pupSize:48px; --pupOpacity:0.55;
   --rainbowSize:18px; --rainbowOpacity:0.28;
 }
@@ -30,34 +25,33 @@ body{
 }
 .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
 
-/* ---------- Bezel with rainbow confetti + Pompompurin wallpaper ---------- */
+/* Bezel + wallpapers */
 .bezel{
   position:relative; width:100%; min-height:68vh; background:#fff; overflow:hidden; padding:16px;
   border:8px solid var(--choco); outline:6px solid var(--shadow);
   box-shadow:0 10px 0 rgba(0,0,0,.08), 0 22px 40px rgba(0,0,0,.2);
 }
 .bezel::before{
-  /* Layer 1: rainbow pixel confetti */
   content:""; position:absolute; inset:0; z-index:0; opacity:var(--rainbowOpacity);
-  image-rendering: pixelated;
-  background-repeat:repeat; background-size:var(--rainbowSize) var(--rainbowSize);
+  image-rendering: pixelated; background-repeat:repeat; background-size:var(--rainbowSize) var(--rainbowSize);
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'><rect width='16' height='16' fill='white'/><rect x='1' y='1' width='2' height='2' fill='%23ff4d4d'/><rect x='5' y='2' width='2' height='2' fill='%23ffa64d'/><rect x='12' y='1' width='2' height='2' fill='%23ffeb00'/><rect x='3' y='7' width='2' height='2' fill='%235de36b'/><rect x='9' y='6' width='2' height='2' fill='%234db2ff'/><rect x='13' y='7' width='2' height='2' fill='%23b36bff'/><rect x='2' y='12' width='2' height='2' fill='%23ffeb00'/><rect x='7' y='12' width='2' height='2' fill='%23ff4d4d'/><rect x='12' y='12' width='2' height='2' fill='%234db2ff'/></svg>");
 }
 .bezel::after{
-  /* Layer 2: Pompompurin tiles */
   content:""; position:absolute; inset:0; z-index:0; opacity:var(--pupOpacity);
-  image-rendering: pixelated; background-repeat:repeat;
-  background-size:var(--pupSize) var(--pupSize);
+  image-rendering: pixelated; background-repeat:repeat; background-size:var(--pupSize) var(--pupSize);
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'><rect width='24' height='24' fill='none'/><g fill='%23f6de5a'><rect x='5' y='8' width='1' height='1'/><rect x='6' y='8' width='1' height='1'/><rect x='7' y='8' width='1' height='1'/><rect x='4' y='9' width='1' height='1'/><rect x='5' y='9' width='1' height='1'/><rect x='6' y='9' width='1' height='1'/><rect x='7' y='9' width='1' height='1'/><rect x='8' y='9' width='1' height='1'/><rect x='3' y='10' width='1' height='1'/><rect x='4' y='10' width='1' height='1'/><rect x='5' y='10' width='1' height='1'/><rect x='6' y='10' width='1' height='1'/><rect x='7' y='10' width='1' height='1'/><rect x='8' y='10' width='1' height='1'/><rect x='9' y='10' width='1' height='1'/><rect x='3' y='11' width='1' height='1'/><rect x='4' y='11' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='6' y='11' width='1' height='1'/><rect x='7' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='9' y='11' width='1' height='1'/><rect x='2' y='12' width='1' height='1'/><rect x='3' y='12' width='1' height='1'/><rect x='4' y='12' width='1' height='1'/><rect x='5' y='12' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/><rect x='7' y='12' width='1' height='1'/><rect x='8' y='12' width='1' height='1'/><rect x='9' y='12' width='1' height='1'/><rect x='10' y='12' width='1' height='1'/><rect x='2' y='13' width='1' height='1'/><rect x='3' y='13' width='1' height='1'/><rect x='4' y='13' width='1' height='1'/><rect x='5' y='13' width='1' height='1'/><rect x='6' y='13' width='1' height='1'/><rect x='7' y='13' width='1' height='1'/><rect x='8' y='13' width='1' height='1'/><rect x='9' y='13' width='1' height='1'/><rect x='3' y='14' width='1' height='1'/><rect x='4' y='14' width='1' height='1'/><rect x='5' y='14' width='1' height='1'/><rect x='6' y='14' width='1' height='1'/><rect x='7' y='14' width='1' height='1'/><rect x='8' y='14' width='1' height='1'/></g><g fill='%236a4a2c'><rect x='5' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='7' y='7' width='1' height='1'/><rect x='4' y='8' width='1' height='1'/><rect x='8' y='8' width='1' height='1'/><rect x='2' y='9' width='1' height='1'/><rect x='1' y='9' width='1' height='1'/><rect x='10' y='9' width='1' height='1'/><rect x='11' y='9' width='1' height='1'/><rect x='5' y='11' width='1' height='1'/><rect x='8' y='11' width='1' height='1'/><rect x='6' y='12' width='1' height='1'/></g><g fill='%23ffcc66'><rect x='5' y='13' width='1' height='1'/><rect x='6' y='13' width='1' height='1'/><rect x='7' y='13' width='1' height='1'/></g></svg>");
 }
 
-/* ---------- Content ---------- */
+/* Content */
 .panel{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:14px; width:100%}
 h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--choco)}
 .subtitle{color:#7b5a45; font-size:clamp(10px,3.3vw,12px)}
 
-/* Board (pixelated boxes) */
-.board{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; width:min(640px,92vw)}
+/* NEW: shared card so timer & controls always align */
+.card{ width:min(640px,92vw); margin:0 auto; display:grid; gap:14px; }
+
+/* Board */
+.board{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; width:100%}
 .cell{
   background:var(--fur);
   border:6px solid var(--fur-dark);
@@ -68,8 +62,8 @@ h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--choco)}
 .num{font-size:clamp(24px,8.5vw,44px); line-height:1; color:var(--choco)}
 .label{margin-top:6px; color:var(--sky); font-size:clamp(9px,2.8vw,10px)}
 
-/* Controls (pixelated buttons/inputs) */
-.controls{display:grid; gap:10px; width:min(640px,92vw)}
+/* Controls */
+.controls{display:grid; gap:10px; width:100%}
 .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
 input,button{
   font:16px/1 "Press Start 2P",monospace; color:var(--text);
@@ -80,7 +74,7 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
 #start{ background:var(--sky) } #start:hover{ background:var(--sky-dark) }
 #reset{ background:var(--pink) } #reset:hover{ background:var(--pink-dark) }
 
-/* Flatpickr (pastel + pixel borders) */
+/* Flatpickr */
 .flatpickr-calendar{
   font-family:"Press Start 2P",monospace; background:#fff; color:var(--text);
   border:6px solid var(--choco) !important; outline:6px solid var(--shadow);
@@ -95,44 +89,28 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
 .flatpickr-day.selected{background:var(--pink); color:var(--choco)}
 .flatpickr-time{border-top:4px solid var(--fur-dark)}
 
-/* === Portrait fix: compact card + slim bars + aligned controls === */
+/* Portrait: compact shared card, perfect alignment */
 @media (max-width: 480px){
   .bezel{ min-height:100vh; padding:12px; border-width:6px; outline-width:4px; }
+  /* clamp the ONE shared card width */
+  .card{ width:92vw; max-width:320px; gap:12px; }
 
-  /* same fixed card width for timer + controls */
-  .board, .controls{
-    width:92vw; max-width:320px; margin:0 auto;
-  }
+  .board{ grid-template-columns:repeat(2,1fr); gap:10px; }
 
-  /* timer grid: 2×2 within the card */
-  .board{ grid-template-columns:repeat(2, 1fr); gap:10px; }
-
-  /* slimmer boxes */
   .cell{ padding:10px 8px; border-width:4px; outline-width:4px; box-shadow:none; }
   .num{ font-size:clamp(28px,11.5vw,44px) }
   .label{ font-size:10px }
 
-  /* controls aligned to the timer columns */
   .controls{ gap:10px; }
-  .controls .row:first-child{
-    display:grid; grid-template-columns:1fr 1fr; gap:10px;
-  }
-  .controls .row:first-child > #when{
-    grid-column:1 / -1; width:100%;
-  }
-  .controls .row:nth-child(2){
-    display:grid; grid-template-columns:1fr 1fr; gap:10px;
-  }
-  .controls .row:nth-child(2) > button{ width:100%; }
+  /* date field spans both columns */
+  .controls .row:first-child{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .controls .row:first-child > #when{ grid-column:1 / -1; width:100%; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-  .row{ justify-content:center; }
-  input, button{
-    border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px;
-  }
-  /* keep long date from expanding the bar */
-  #when{ font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  /* buttons align with the 2 columns */
+  .controls .row:nth-child(2){ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .controls .row:nth-child(2) > button{ width:100%; border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px; }
 }
-/* ultra narrow phones: stack timer 1×4 */
+/* Ultra narrow: 1×4 timer */
 @media (max-width: 340px){ .board{ grid-template-columns:1fr } }
 </style>
 </head>
@@ -143,27 +121,30 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
       <h1 id="title">COUNTYDOWN</h1>
       <div class="subtitle" id="subtitle">Pick a time below.</div>
 
-      <section>
-        <div class="board" role="timer" aria-live="polite" aria-atomic="true">
-          <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
-          <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
-          <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
-          <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
-        </div>
-      </section>
+      <!-- SHARED CARD WRAPPER -->
+      <div class="card">
+        <section>
+          <div class="board" role="timer" aria-live="polite" aria-atomic="true">
+            <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
+            <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
+            <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
+            <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
+          </div>
+        </section>
 
-      <section class="controls">
-        <div class="row"><input id="when" type="text" placeholder="Select date & time" /></div>
-        <div class="row">
-          <button id="start">Start</button>
-          <button id="reset">Reset</button>
-        </div>
-      </section>
+        <section class="controls">
+          <div class="row"><input id="when" type="text" placeholder="Select date & time" /></div>
+          <div class="row">
+            <button id="start">Start</button>
+            <button id="reset">Reset</button>
+          </div>
+        </section>
+      </div>
+      <!-- /card -->
     </div>
   </div>
 </main>
 
-<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" onerror="document.getElementById('when').type='datetime-local'"></script>
 <script>
 let target = null, timer = null;
@@ -220,7 +201,7 @@ function initPicker(){
     w.type = "datetime-local";
     w.addEventListener("change", e => { if(e.target.value) target = new Date(e.target.value); });
   }
-  // iOS focus helper: keep field centered when keyboard opens
+  // iOS focus helper
   w.addEventListener('focus', () => setTimeout(()=>w.scrollIntoView({block:'center', behavior:'smooth'}), 50), {passive:true});
 }
 
