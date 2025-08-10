@@ -95,28 +95,30 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
 .flatpickr-day.selected{background:var(--pink); color:var(--choco)}
 .flatpickr-time{border-top:4px solid var(--fur-dark)}
 
-/* ===== Portrait tweaks (no stretched bars) ===== */
-@media (max-width: 480px) {
-  .bezel{ min-height:100vh; padding:12px; }
-  .panel{ gap:12px }
+/* === Portrait fix: compact card + slim bars === */
+@media (max-width: 480px){
+  .bezel{ min-height:100vh; padding:12px; border-width:6px; outline-width:4px; }
 
-  /* softer wallpaper so text pops */
-  :root{ --rainbowOpacity:0.18; --pupOpacity:0.42; --pupSize:40px; }
+  /* Same fixed card width for timer + controls */
+  .board, .controls{
+    width:92vw;
+    max-width:320px;   /* adjust 300–340px if desired */
+    margin:0 auto;
+  }
 
-  /* 2×2 timer grid */
-  .board{ grid-template-columns:repeat(2,1fr); gap:10px; width:100%; }
+  .board{ grid-template-columns:repeat(2, 1fr); gap:10px; }
 
-  /* thinner borders, bigger numbers */
-  .cell{ padding:12px 8px; border-width:4px; outline-width:4px; box-shadow:none; }
-  .num{ font-size:clamp(28px,12vw,46px) }
+  .cell{ padding:10px 8px; border-width:4px; outline-width:4px; box-shadow:none; }
+  .num{ font-size:clamp(28px,11.5vw,44px) }
   .label{ font-size:10px }
 
-  /* compact controls card (no full-width bars) */
-  .controls{ width:92vw; max-width:340px; margin:0 auto; gap:8px; }
   .row{ gap:8px; justify-content:center; }
-  input,button{ width:100%; border-width:4px; outline-width:4px; padding:12px; }
+  input,button{ width:100%; border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px; }
+
+  /* keep long date from expanding the bar */
+  #when{ font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 }
-/* ultra narrow phones: 1×4 grid */
+/* ultra narrow phones: stack timer 1×4 */
 @media (max-width: 340px){ .board{ grid-template-columns:1fr } }
 </style>
 </head>
@@ -143,7 +145,6 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
           <button id="reset">Reset</button>
         </div>
       </section>
-      <!-- footer removed per request -->
     </div>
   </div>
 </main>
