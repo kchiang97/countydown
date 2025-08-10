@@ -95,26 +95,40 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
 .flatpickr-day.selected{background:var(--pink); color:var(--choco)}
 .flatpickr-time{border-top:4px solid var(--fur-dark)}
 
-/* === Portrait fix: compact card + slim bars === */
+/* === Portrait fix: compact card + slim bars + aligned controls === */
 @media (max-width: 480px){
   .bezel{ min-height:100vh; padding:12px; border-width:6px; outline-width:4px; }
 
-  /* Same fixed card width for timer + controls */
+  /* same fixed card width for timer + controls */
   .board, .controls{
-    width:92vw;
-    max-width:320px;   /* adjust 300–340px if desired */
-    margin:0 auto;
+    width:92vw; max-width:320px; margin:0 auto;
   }
 
+  /* timer grid: 2×2 within the card */
   .board{ grid-template-columns:repeat(2, 1fr); gap:10px; }
 
+  /* slimmer boxes */
   .cell{ padding:10px 8px; border-width:4px; outline-width:4px; box-shadow:none; }
   .num{ font-size:clamp(28px,11.5vw,44px) }
   .label{ font-size:10px }
 
-  .row{ gap:8px; justify-content:center; }
-  input,button{ width:100%; border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px; }
+  /* controls aligned to the timer columns */
+  .controls{ gap:10px; }
+  .controls .row:first-child{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  }
+  .controls .row:first-child > #when{
+    grid-column:1 / -1; width:100%;
+  }
+  .controls .row:nth-child(2){
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  }
+  .controls .row:nth-child(2) > button{ width:100%; }
 
+  .row{ justify-content:center; }
+  input, button{
+    border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px;
+  }
   /* keep long date from expanding the bar */
   #when{ font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 }
