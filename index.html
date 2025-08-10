@@ -2,187 +2,81 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Pixel Countdown</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟡</text></svg>">
-
 <style>
   :root{
-    --bg:#000016;          /* deep arcade navy */
-    --maze:#0a1a4f;        /* maze walls */
-    --grid:#0b0f2a;        /* faint grid lines */
-    --text:#e6f3ff;        /* UI text */
-    --muted:#7aa0ff;       /* subtle hints */
-    --accent:#ffeb00;      /* “chomper” yellow */
-    --accent-2:#00e5ff;    /* neon cyan */
-    --danger:#ff3b7f;      /* neon magenta (ghosty) */
-    --ok:#56ff7a;          /* neon green */
-    --tile:#111b4a;        /* tile bg for controls */
+    --bg:#000016; --maze:#0a1a4f; --grid:#0b0f2a; --text:#e6f3ff; --muted:#7aa0ff;
+    --accent:#ffeb00; --accent-2:#00e5ff; --tile:#111b4a;
   }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
+  *{box-sizing:border-box} html,body{height:100%}
   body{
-    margin:0;
-    background:
-      /* faint grid */
+    margin:0; background:
       linear-gradient(var(--grid) 1px, transparent 1px) 0 0/24px 24px,
       linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
       var(--bg);
     color:var(--text);
     font-family:"Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Arial, monospace;
-    display:grid; place-items:center; padding:18px;
+    display:grid; place-items:center; padding:16px; -webkit-tap-highlight-color:transparent;
     image-rendering: pixelated;
   }
-
-  .wrap{width:min(980px,94vw); display:flex; flex-direction:column; gap:18px; align-items:center; text-align:center}
-
-  /* Pixel frame (like an arcade bezel) */
+  .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
   .bezel{
-    width:100%;
-    padding:18px;
-    background:linear-gradient(180deg,#0d1f66,#08133a);
-    border:8px solid var(--maze);
-    outline:4px solid #041034;
-    box-shadow:
-      0 0 0 6px #000,
-      0 12px 0 0 #0006,
-      0 20px 40px rgba(0,0,0,.7);
-    border-radius:4px;
+    width:100%; padding:14px; background:linear-gradient(180deg,#0d1f66,#08133a);
+    border:8px solid var(--maze); outline:4px solid #041034; border-radius:6px;
+    box-shadow:0 0 0 6px #000, 0 12px 0 0 #0006, 0 20px 40px rgba(0,0,0,.7);
   }
+  h1{margin:0 0 6px; font-size:clamp(18px,5.5vw,28px); letter-spacing:1px; color:var(--accent); text-shadow:0 0 8px rgba(255,235,0,.35),0 0 2px #000; word-break:break-word}
+  .subtitle{color:var(--muted); font-size:clamp(10px,3.3vw,12px); line-height:1.6}
 
-  h1{
-    margin:0 0 8px 0;
-    font-size: clamp(18px, 3.6vw, 28px);
-    letter-spacing: 1px;
-    color: var(--accent);
-    text-shadow: 0 0 8px rgba(255,235,0,.35), 0 0 2px #000;
-  }
-  .subtitle{
-    color:var(--muted);
-    font-size: clamp(10px, 2.2vw, 12px);
-    line-height:1.6;
-  }
+  /* timer board */
+  .board{margin-top:10px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px}
+  .cell{background:#0a1340; border:4px solid var(--maze); outline:2px solid #020824; border-radius:4px; padding:12px 8px; box-shadow:inset 0 0 0 4px #020b2c}
+  .num{font-variant-numeric:tabular-nums; font-size:clamp(22px,8.5vw,42px); line-height:1; color:#fff; text-shadow:0 0 6px rgba(122,160,255,.45)}
+  .label{margin-top:6px; color:var(--accent-2); font-size:clamp(9px,2.8vw,10px); letter-spacing:.08em}
 
-  /* Timer board */
-  .board{
-    margin-top:14px;
-    display:grid;
-    grid-template-columns: repeat(4, minmax(0,1fr));
-    gap:12px;
-  }
-  .cell{
-    background: #0a1340;
-    border:4px solid var(--maze);
-    outline:2px solid #020824;
-    border-radius:2px;
-    padding:14px 8px;
-    box-shadow: inset 0 0 0 4px #020b2c;
-  }
-  .num{
-    font-variant-numeric: tabular-nums;
-    font-size: clamp(22px, 6.2vw, 42px);
-    line-height:1;
-    color:#fff;
-    text-shadow: 0 0 6px rgba(122,160,255,.45);
-  }
-  .label{
-    margin-top:8px;
-    color: var(--accent-2);
-    font-size: 10px;
-    letter-spacing: .08em;
-  }
+  /* pellet progress */
+  .progress{margin:12px 0 4px; display:grid; grid-template-columns:repeat(24,1fr); gap:6px}
+  .pellet{width:100%; aspect-ratio:1; background:#09123b; border:3px solid var(--maze); outline:2px solid #020824; border-radius:2px; box-shadow:inset 0 0 0 3px #020b2c}
+  .pellet.filled{background:var(--accent); border-color:#cdbd00; box-shadow:0 0 8px rgba(255,235,0,.55), inset 0 0 0 3px #473f00}
 
-  /* Pellet progress bar (fills from left to right) */
-  .progress{
-    margin:16px 0 6px;
-    display:grid;
-    grid-template-columns: repeat(30, 1fr);
-    gap:6px;
-  }
-  .pellet{
-    width:100%; aspect-ratio:1;
-    background: #09123b;
-    border:3px solid var(--maze);
-    outline:2px solid #020824;
-    border-radius:2px;
-    position:relative;
-    box-shadow: inset 0 0 0 3px #020b2c;
-  }
-  .pellet.filled{
-    background: var(--accent);
-    border-color:#cdbd00;
-    box-shadow: 0 0 8px rgba(255,235,0,.55), inset 0 0 0 3px #473f00;
-  }
-
-  /* Legend + tiny pixel characters */
-  .legend{
-    margin-top:8px;
-    display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
-    font-size:10px; color:var(--muted);
-  }
+  .legend{margin-top:6px; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; font-size:10px; color:var(--muted)}
   .dot{display:inline-block; width:10px; height:10px; background:var(--accent); margin-right:6px; vertical-align:-1px; box-shadow:0 0 6px rgba(255,235,0,.55)}
-  .ghost{display:inline-block; width:14px; height:14px; background:var(--danger); margin-right:6px; position:relative; box-shadow:0 0 6px rgba(255,59,127,.5)}
-  .ghost::after,.ghost::before{content:""; position:absolute; bottom:-4px; width:6px; height:4px; background:var(--danger)}
-  .ghost::after{left:0}
-  .ghost::before{right:0}
 
-  /* Controls panel */
-  .controls{
-    margin-top:14px;
-    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  /* controls */
+  .controls{margin-top:12px; display:grid; grid-template-columns:1fr; gap:10px; justify-items:center}
+  .row{display:flex; gap:10px; width:100%; justify-content:center; flex-wrap:wrap}
+  input,button{
+    font:16px/1 "Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Arial, monospace; /* 16px stops iOS zoom */
+    color:var(--text); background:var(--tile); border:4px solid var(--maze); outline:2px solid #020824; padding:12px 14px; border-radius:4px;
   }
-  input,button,select{
-    font:inherit; color:var(--text);
-    background: var(--tile);
-    border:4px solid var(--maze);
-    outline:2px solid #020824;
-    padding:10px 12px;
-    border-radius:2px;
-  }
-  input[type="datetime-local"]{min-width:260px}
-  button{
-    cursor:pointer;
-    background: var(--accent-2);
-    color:#00121c;
-    text-shadow:none;
-  }
-  button.secondary{
-    background: #14235e; color:#cfe4ff;
-  }
+  input[type="datetime-local"]{min-width:260px; width:min(420px,90vw)}
+  input[type="text"]{width:min(420px,90vw)}
+  button{cursor:pointer; background:var(--accent-2); color:#00121c; min-width:140px}
+  .secondary{background:#14235e; color:#cfe4ff}
+  footer{margin-top:6px; color:var(--muted); font-size:10px}
 
-  .share,.notice,footer{color:var(--muted); font-size:10px; margin-top:6px}
-  a{color:#67f3ff; text-decoration:none}
-  a:hover{text-decoration:underline}
-
-  /* Tiny marquee pellets on top */
-  .marquee{
-    height:10px; overflow:hidden; position:relative; margin: 4px 0 8px;
+  /* small phones: tighten gaps, 2 columns for numbers if very narrow */
+  @media (max-width:420px){
+    .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .progress{grid-template-columns:repeat(16,1fr); gap:5px}
+    .pellet{outline-width:1px; border-width:2px}
+    button{min-width:44vw}
   }
-  .marquee .row{
-    position:absolute; left:0; right:0; top:0; display:flex; gap:14px; justify-content:center;
-    animation: slide 6s linear infinite;
-  }
-  .marquee .p{width:8px; height:8px; background:var(--accent); box-shadow:0 0 6px rgba(255,235,0,.55)}
-  @keyframes slide{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 </style>
 </head>
 <body>
   <main class="wrap">
     <div class="bezel">
       <h1 id="title">PIXEL COUNTDOWN</h1>
-      <div class="subtitle" id="subtitle">Insert coin… or pick a time below.</div>
+      <div class="subtitle" id="subtitle">Pick a time below.</div>
 
-      <div class="marquee" aria-hidden="true">
-        <div class="row">
-          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
-          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
-          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
-          <span class="p"></span><span class="p"></span><span class="p"></span><span class="p"></span>
-        </div>
-      </div>
+      <!-- pellets -->
+      <div class="progress" id="progress" aria-hidden="true"></div>
 
+      <!-- timer -->
       <section>
         <div class="board" role="timer" aria-live="polite" aria-atomic="true">
           <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
@@ -191,27 +85,16 @@
           <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
         </div>
 
-        <!-- pellet progress bar (30 tiles) -->
-        <div class="progress" id="progress" aria-hidden="true"></div>
-
-        <div class="legend">
-          <span><span class="dot"></span>progress</span>
-          <span><span class="ghost"></span>time ghosts (be fast!)</span>
-        </div>
+        <div class="legend"><span><span class="dot"></span>progress</span></div>
 
         <div class="controls">
           <input id="when" type="datetime-local" />
           <input id="label" type="text" placeholder="Event (e.g., LEVEL UP)" />
-          <select id="finishfx" aria-label="Finish effect">
-            <option value="confetti">Pixel confetti on finish</option>
-            <option value="none">No effect</option>
-          </select>
-          <button id="start">START</button>
-          <button id="copy" class="secondary">COPY LINK</button>
-          <button id="reset" class="secondary">RESET</button>
+          <div class="row">
+            <button id="start">START</button>
+            <button id="reset" class="secondary">RESET</button>
+          </div>
         </div>
-        <div class="share" id="shareNote"></div>
-        <div class="notice" id="tzNote"></div>
       </section>
 
       <footer id="footer"></footer>
@@ -224,78 +107,44 @@
   const pad = (n) => String(n).padStart(2,'0');
   const params = new URLSearchParams(location.search);
 
-  // URL params: ?until=ISO&title=PIXEL%20FEST&fx=confetti
   const initialISO = params.get('until');
   const initialTitle = params.get('title') || 'PIXEL COUNTDOWN';
-  const initialFx = params.get('fx') || 'confetti';
 
-  function defaultTarget(){
-    const now = new Date();
-    return new Date(now.getFullYear()+1, 0, 1, 0, 0, 0);
-  }
+  function defaultTarget(){ const now=new Date(); return new Date(now.getFullYear()+1,0,1,0,0,0); }
 
   let target = initialISO ? new Date(initialISO) : defaultTarget();
   let startTime = new Date();
   let tickId = null;
 
-  // build 30 pellets
+  // pellets (mobile: 24; desktop expands via CSS)
   const progressBar = $('progress');
-  const PELLETS = 30;
-  for (let i=0;i<PELLETS;i++){
-    const dot = document.createElement('div');
-    dot.className = 'pellet';
-    progressBar.appendChild(dot);
-  }
+  const PELLETS = getComputedStyle(progressBar).gridTemplateColumns.split(' ').length || 24;
+  for (let i=0;i<PELLETS;i++){ const p=document.createElement('div'); p.className='pellet'; progressBar.appendChild(p); }
 
   // init UI
   $('title').textContent = decodeURIComponent(initialTitle);
   $('label').value = initialTitle !== 'PIXEL COUNTDOWN' ? decodeURIComponent(initialTitle) : '';
-  $('finishfx').value = initialFx;
   setPickerFromDate(target);
 
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time';
-  $('tzNote').textContent = `Time zone: ${tz}`;
   $('footer').textContent = `Now: ${new Date().toLocaleString()} — ${tz}`;
 
   function diffParts(ms){
     if (ms < 0) ms = 0;
     const s = Math.floor(ms / 1000);
-    return {
-      days: Math.floor(s / 86400),
-      hours: Math.floor((s % 86400) / 3600),
-      minutes: Math.floor((s % 3600) / 60),
-      seconds: s % 60
-    };
+    return { days:Math.floor(s/86400), hours:Math.floor((s%86400)/3600), minutes:Math.floor((s%3600)/60), seconds:s%60 };
   }
 
   function setPickerFromDate(date){
     const z = new Date(date.getTime() - date.getTimezoneOffset()*60000).toISOString().slice(0,16);
     $('when').value = z;
   }
-
-  function readPicker(){
-    const v = $('when').value;
-    return v ? new Date(v) : null; // local time
-  }
-
-  function pageShareLink(){
-    const title = $('label').value?.trim() || 'PIXEL COUNTDOWN';
-    const fx = $('finishfx').value || 'confetti';
-    const iso = target.toISOString();
-    const url = new URL(location.href);
-    url.searchParams.set('until', iso);
-    url.searchParams.set('title', title);
-    url.searchParams.set('fx', fx);
-    return url.toString();
-  }
+  function readPicker(){ const v=$('when').value; return v ? new Date(v) : null; }
 
   function updatePellets(fracRemaining){
-    // fill pellets from left to right based on remaining fraction (1 -> full)
     const pellets = progressBar.children;
     const filled = Math.round(PELLETS * fracRemaining);
-    for (let i=0;i<PELLETS;i++){
-      pellets[i].classList.toggle('filled', i < filled);
-    }
+    for (let i=0;i<PELLETS;i++){ pellets[i].classList.toggle('filled', i < filled); }
   }
 
   function update(){
@@ -310,15 +159,10 @@
 
     const span = Math.max(1, target - startTime);
     const elapsed = Math.min(Math.max(0, now - startTime), span);
-    const fracElapsed = elapsed / span;
-    const fracRemaining = 1 - fracElapsed;
-
+    const fracRemaining = 1 - (elapsed / span);
     updatePellets(fracRemaining);
 
-    if (remaining <= 0){
-      clearInterval(tickId); tickId = null;
-      finish();
-    }
+    if (remaining <= 0){ clearInterval(tickId); tickId = null; finish(); }
   }
 
   function startTimer(){
@@ -332,52 +176,16 @@
   function finish(){
     $('subtitle').textContent = `LEVEL COMPLETE! (${target.toLocaleString()})`;
     document.title = 'LEVEL COMPLETE! 🎉';
-    if ($('finishfx').value === 'confetti' || params.get('fx') === 'confetti') pixelConfetti();
     updatePellets(0);
-  }
-
-  function pixelConfetti(){
-    const N = 150;
-    for (let i=0;i<N;i++){
-      const p = document.createElement('div');
-      const size = 8 + Math.random()*8;
-      p.style.position='fixed';
-      p.style.left = (Math.random()*100)+'vw';
-      p.style.top = '-12px';
-      p.style.width = size+'px';
-      p.style.height = size+'px';
-      p.style.background = [ 'var(--accent)', 'var(--accent-2)', 'var(--danger)', 'var(--ok)' ][Math.floor(Math.random()*4)];
-      p.style.imageRendering = 'pixelated';
-      p.style.zIndex = 9999;
-      p.style.outline = '2px solid #020824';
-      document.body.appendChild(p);
-      const duration = 2500 + Math.random()*2500;
-      p.animate([
-        { transform:'translateY(0)', opacity:1 },
-        { transform:`translateY(${100+Math.random()*30}vh)`, opacity:0.9 }
-      ], {duration, easing:'linear'}).onfinish = ()=>p.remove();
-    }
   }
 
   $('start').addEventListener('click', ()=>{
     const picked = readPicker();
     if (!picked) return alert('Pick a date/time first!');
-    target = picked;
-    startTime = new Date();
+    target = picked; startTime = new Date();
     const title = $('label').value?.trim();
     $('title').textContent = title || 'PIXEL COUNTDOWN';
-    $('subtitle').textContent = 'Loading…';
-    $('shareNote').innerHTML = `Share: <a href="${pageShareLink()}">${pageShareLink()}</a>`;
     startTimer();
-  });
-
-  $('copy').addEventListener('click', async ()=>{
-    try{
-      await navigator.clipboard.writeText(pageShareLink());
-      $('shareNote').textContent = 'Link copied!';
-    }catch{
-      $('shareNote').textContent = 'Could not copy. Long-press the address bar.';
-    }
   });
 
   $('reset').addEventListener('click', ()=>{
@@ -385,9 +193,7 @@
     setPickerFromDate(target);
     $('label').value = '';
     $('title').textContent = 'PIXEL COUNTDOWN';
-    $('finishfx').value = 'confetti';
-    history.replaceState({}, '', location.pathname);
-    $('shareNote').textContent = '';
+    $('subtitle').textContent = 'Pick a time below.';
     startTimer();
   });
 
