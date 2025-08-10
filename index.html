@@ -13,6 +13,7 @@
   --fur:#f6de5a; --fur-dark:#e6cf44; --choco:#6a4a2c; --cream:#fff9e6;
   --pink:#ff9cc6; --pink-dark:#ff7fb4; --sky:#a7e2ff; --sky-dark:#6cc7f0;
   --shadow:#2b1a11; --text:#432b1b;
+
   --pupSize:48px; --pupOpacity:0.55;
   --rainbowSize:18px; --rainbowOpacity:0.28;
 }
@@ -25,7 +26,7 @@ body{
 }
 .wrap{width:min(980px,96vw); display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center}
 
-/* Bezel + wallpapers */
+/* Bezel + wallpaper */
 .bezel{
   position:relative; width:100%; min-height:68vh; background:#fff; overflow:hidden; padding:16px;
   border:8px solid var(--choco); outline:6px solid var(--shadow);
@@ -47,11 +48,8 @@ body{
 h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--choco)}
 .subtitle{color:#7b5a45; font-size:clamp(10px,3.3vw,12px)}
 
-/* NEW: shared card so timer & controls always align */
-.card{ width:min(640px,92vw); margin:0 auto; display:grid; gap:14px; }
-
-/* Board */
-.board{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; width:100%}
+/* Timer board */
+.board{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; width:min(640px,92vw)}
 .cell{
   background:var(--fur);
   border:6px solid var(--fur-dark);
@@ -63,7 +61,7 @@ h1{margin:0; font-size:clamp(18px,5.5vw,28px); color:var(--choco)}
 .label{margin-top:6px; color:var(--sky); font-size:clamp(9px,2.8vw,10px)}
 
 /* Controls */
-.controls{display:grid; gap:10px; width:100%}
+.controls{display:grid; gap:10px; width:min(640px,92vw)}
 .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
 input,button{
   font:16px/1 "Press Start 2P",monospace; color:var(--text);
@@ -89,28 +87,37 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
 .flatpickr-day.selected{background:var(--pink); color:var(--choco)}
 .flatpickr-time{border-top:4px solid var(--fur-dark)}
 
-/* Portrait: compact shared card, perfect alignment */
+/* ===== Portrait: compact, aligned, no stretch ===== */
 @media (max-width: 480px){
   .bezel{ min-height:100vh; padding:12px; border-width:6px; outline-width:4px; }
-  /* clamp the ONE shared card width */
-  .card{ width:92vw; max-width:320px; gap:12px; }
 
+  /* clamp both sections to the SAME width */
+  .board, .controls{ width:92vw; max-width:320px; margin:0 auto; }
+
+  /* timer 2×2 */
   .board{ grid-template-columns:repeat(2,1fr); gap:10px; }
 
+  /* slimmer tiles */
   .cell{ padding:10px 8px; border-width:4px; outline-width:4px; box-shadow:none; }
   .num{ font-size:clamp(28px,11.5vw,44px) }
   .label{ font-size:10px }
 
+  /* controls match grid columns */
   .controls{ gap:10px; }
-  /* date field spans both columns */
-  .controls .row:first-child{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .controls .row:first-child > #when{ grid-column:1 / -1; width:100%; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-  /* buttons align with the 2 columns */
-  .controls .row:nth-child(2){ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .controls .row:nth-child(2) > button{ width:100%; border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px; }
+  .controls .row:first-child{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  }
+  .controls .row:first-child > #when{
+    grid-column:1 / -1; width:100%; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .controls .row:nth-child(2){
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  }
+  .controls .row:nth-child(2) > button{
+    width:100%; border-width:3px; outline-width:3px; padding:10px 12px; font-size:14px;
+  }
 }
-/* Ultra narrow: 1×4 timer */
+/* Ultra narrow: stack 1×4 */
 @media (max-width: 340px){ .board{ grid-template-columns:1fr } }
 </style>
 </head>
@@ -121,26 +128,22 @@ button{cursor:pointer; min-width:140px; color:var(--choco)}
       <h1 id="title">COUNTYDOWN</h1>
       <div class="subtitle" id="subtitle">Pick a time below.</div>
 
-      <!-- SHARED CARD WRAPPER -->
-      <div class="card">
-        <section>
-          <div class="board" role="timer" aria-live="polite" aria-atomic="true">
-            <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
-            <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
-            <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
-            <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
-          </div>
-        </section>
+      <section>
+        <div class="board" role="timer" aria-live="polite" aria-atomic="true">
+          <div class="cell"><div class="num" id="d">0</div><div class="label">DAYS</div></div>
+          <div class="cell"><div class="num" id="h">00</div><div class="label">HOURS</div></div>
+          <div class="cell"><div class="num" id="m">00</div><div class="label">MIN</div></div>
+          <div class="cell"><div class="num" id="s">00</div><div class="label">SEC</div></div>
+        </div>
+      </section>
 
-        <section class="controls">
-          <div class="row"><input id="when" type="text" placeholder="Select date & time" /></div>
-          <div class="row">
-            <button id="start">Start</button>
-            <button id="reset">Reset</button>
-          </div>
-        </section>
-      </div>
-      <!-- /card -->
+      <section class="controls">
+        <div class="row"><input id="when" type="text" placeholder="Select date & time" /></div>
+        <div class="row">
+          <button id="start">Start</button>
+          <button id="reset">Reset</button>
+        </div>
+      </section>
     </div>
   </div>
 </main>
@@ -186,7 +189,6 @@ function reset(){
   const w = document.getElementById('when');
   if(w._flatpickr) w._flatpickr.setDate(new Date(), true); else w.value = '';
 }
-
 function initPicker(){
   const w = document.getElementById('when');
   if(window.flatpickr){
@@ -201,10 +203,9 @@ function initPicker(){
     w.type = "datetime-local";
     w.addEventListener("change", e => { if(e.target.value) target = new Date(e.target.value); });
   }
-  // iOS focus helper
+  // iOS: keep field centered when keyboard opens
   w.addEventListener('focus', () => setTimeout(()=>w.scrollIntoView({block:'center', behavior:'smooth'}), 50), {passive:true});
 }
-
 document.getElementById("start").addEventListener("click", start);
 document.getElementById("reset").addEventListener("click", reset);
 initPicker();
